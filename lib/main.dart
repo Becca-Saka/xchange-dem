@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:xchange/barrel.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:xchange/ui/authentication/phone_signup_view.dart';
 const bool USE_EMULATOR = false;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -58,9 +58,9 @@ class MyApp extends StatelessWidget {
               //         return child!;
               //       });
               // },
-              // home: TestScreen(),
-              initialRoute: AppPages.INITIAL,
-              getPages: AppPages.routes,
+              home: PhoneSignUp(),
+              // initialRoute: AppPages.INITIAL,
+              // getPages: AppPages.routes,
             );
   }
 }

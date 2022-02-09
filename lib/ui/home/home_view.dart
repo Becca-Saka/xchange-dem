@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:xchange/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 
@@ -24,34 +22,39 @@ class HomeView extends GetView<AccountController> {
     var gridViewHeight = (cellHeight * 2) + (_crossAxisSpacing * 1.8);
 
     return Scaffold(
+        appBar: AppBar(),
         body: SafeArea(
-      child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                heightMin(),
-                appHeader(MySize.scaledSize(isSmall, isMedium, 45),
-                    MySize.scaledSize(isSmall, isMedium, 10)),
-                heightMin(size: 9),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: controller.usersInChat.length,
-                    itemBuilder: (context, index) {
-                      final user = controller.usersInChat[index];
-                      return ListTile(
-                        title: Text('${user.name}'),
-                        subtitle: Text('${user.email}'),
-                        onTap: () => controller.navigateToChat(user),
-                      );
-                    },
-                  ),
+          child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Obx(
+                () => Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    heightMin(),
+                    // appHeader(MySize.scaledSize(isSmall, isMedium, 45),
+                    //     MySize.scaledSize(isSmall, isMedium, 10)),
+                    // heightMin(size: 9),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: controller.usersInChat.length,
+                        itemBuilder: (context, index) {
+                          final user = controller.usersInChat[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              child: Text('${user.name!.substring(0, 1)}'),
+                            ),
+                            title: Text('${user.name}'),
+                            subtitle: Text('${user.email}'),
+                            onTap: () => controller.navigateToChat(user),
+                          );
+                        },
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: controller.logout, child: Text('Logout')),
+                  ],
                 ),
-                TextButton(onPressed: controller.logout, child: Text('Logout')),
-              ],
-            ),
-          )),
-    ));
+              )),
+        ));
   }
 }

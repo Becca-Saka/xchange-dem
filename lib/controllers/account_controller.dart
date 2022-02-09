@@ -8,11 +8,14 @@ class AccountController extends GetxController {
   RxList<UserDetails> usersInChat = <UserDetails>[].obs;
 
   UserDetails currentChat = UserDetails();
-
-  logout() async {
-    await _authenticationService
-        .logout()
-        .whenComplete(() => Get.offAllNamed(Routes.LOGIN));
+  @override
+  void onInit() {
+    final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
+    log('user from storage: $userFromStorage');
+    userDetails.value =
+        UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
+    getUsersInDatabase();
+    super.onInit();
   }
 
   getUsersInDatabase() async {
@@ -26,20 +29,19 @@ class AccountController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
-    log('user from storage: $userFromStorage');
-    userDetails.value =
-        UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
-    getUsersInDatabase();
-    super.onInit();
+  getRegisteredUserContacts(){
+    
   }
 
   navigateToChat(UserDetails user) {
     currentChat = user;
-    Get.toNamed(Routes.CHAT, arguments: {
-      'match': MatchDetails(users: [], isNew: {}, uid: '')
-    });
+    Get.toNamed(Routes.CHAT,
+        arguments: {'match': MatchDetails(users: [], isNew: {}, uid: '')});
+  }
+
+  logout() async {
+    await _authenticationService
+        .logout()
+        .whenComplete(() => Get.offAllNamed(Routes.LOGIN));
   }
 }
