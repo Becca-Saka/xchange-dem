@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "84819060121",
+    "project_id": "xchange-c9924",
+    "storage_bucket": "xchange-c9924.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84819060121:android:0084a53f3df9881e1e1f08",
+        "android_client_info": {
+          "package_name": "com.example.xchange"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84819060121-sjfruqd1lpdelt22qkpjuh54l8f60rr2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZj83QkyAbBYN3w_5_P4cCJEx4fcQhh8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84819060121-sjfruqd1lpdelt22qkpjuh54l8f60rr2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
