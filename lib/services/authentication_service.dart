@@ -104,6 +104,7 @@ class AuthenticationService {
       if (user != null) {
         isLoggedIn = true;
         await getUserData();
+        log('user is logged in');
       } else {
         isLoggedIn = false;
       }
@@ -365,11 +366,135 @@ class AuthenticationService {
       }
     }
   }
+
+  Future<void> verifyPhoneNumber(String text,
+      {required Function(String verificationId) onCodeSent}) async {
+    try {
+      await auth.verifyPhoneNumber(
+        phoneNumber: text,
+        timeout: const Duration(seconds: 60),
+        verificationCompleted: (AuthCredential credential) {
+          log('verification completed');
+          log('credential: $credential');
+          auth.signInWithCredential(credential).then((UserCredential result) {
+            log('result: $result');
+            Get.offAllNamed(Routes.LOGIN);
+          });
+        },
+        verificationFailed: (FirebaseAuthException exception) {
+          log('verification failed');
+          log('exception: $exception');
+        },
+        codeSent: (String verificationId, int? forceResendingToken) {
+          log('code sent');
+          log('verificationId: $verificationId');
+          log('forceResendingToken: $forceResendingToken');
+          onCodeSent(verificationId);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          log('code auto retrieval timeout');
+          log('verificationId: $verificationId');
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      log('$e');
+      final errorMessage = getMessageFromErrorCode(e);
+      errorSnackbar(msg: errorMessage);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<UserCredential> verifyOTP(
+      String verificationId, String codeSent) async {
+    try {
+      return await auth.signInWithCredential(PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: codeSent));
+    } on FirebaseAuthException catch (e) {
+      log('$e');
+      final errorMessage = getMessageFromErrorCode(e);
+      errorSnackbar(msg: errorMessage);
+      rethrow;
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<void> saveUser(
+      String name, UserCredential userCredential, String? path) async {
+    try {
+      User user = userCredential.user!;
+      UserDetails userDetails = UserDetails(
+        name: name,
+        currentMatches: [],
+        currentDeck: [],
+        lat: null,
+        long: null,
+        uid: user.uid,
+        phoneNumber: user.phoneNumber,
+      );
+      if (path != null && path != '') {
+        log('path is not null');
+        userDetails.imageUrl = await saveProfileImage(path, user.uid);
+      }
+
+      await firestore
+          .collection("Users")
+          .doc(userDetails.uid)
+          .set(userDetails.toJson());
+      await getUser();
+    } catch (e) {
+      log('$e');
+    }
+  }
+
+  Future<bool> getUser() async {
+    bool exist = false;
+    try {
+      final uid = auth.currentUser!.uid;
+      final userDetails = await firestore.collection("Users").doc(uid).get();
+      if (userDetails.exists) {
+        LocalStorage.clearBoxes();
+        LocalStorage.userDetail.val = jsonEncode(userDetails.data());
+        log('saved ${LocalStorage.userDetail.val}');
+        exist = true;
+      } else {
+        exist = false;
+      }
+    } catch (e) {
+      log('$e');
+    }
+    return exist;
+  }
+
+  Future<bool> checkLoginn() async {
+    bool isLoggedIn = false;
+    try {
+      await auth.currentUser!.reload();
+      User? user = auth.currentUser;
+      if (user != null) {
+        isLoggedIn = true;
+        await getUser();
+        log('user is logged in');
+      } else {
+        isLoggedIn = false;
+      }
+    } catch (e) {
+      log(' ERROR $e');
+      isLoggedIn = false;
+    }
+    return isLoggedIn;
+  }
 }
 
 String getMessageFromErrorCode(FirebaseAuthException e) {
   String msg;
   switch (e.code) {
+    case "INVALID-VERIFICATION-CODE":
+    case "invalid-verification-code":
+      msg = "Code is invalid. Please try again.";
+      break;
     case "ERROR_EMAIL_ALREADY_IN_USE":
     case "account-exists-with-different-credential":
     case "email-already-in-use":

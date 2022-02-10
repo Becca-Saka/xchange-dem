@@ -66,7 +66,7 @@ Widget customTextField(
       keyboardType: textInputType,
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
-      style: TextStyle(fontWeight: FontWeight.bold),
+      style: const TextStyle(fontWeight: FontWeight.bold),
       decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
@@ -80,16 +80,13 @@ Widget authButton(String text,
     {Function()? onTap,
     double height = 50.0,
     double fontSize = 17.0,
-    bool isButtonEnabled = false,
-    bool isFacebook = false}) {
-  return Container(
+    bool isButtonEnabled = false,}) {
+  return SizedBox(
     width: double.infinity,
     height: height,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: isFacebook
-              ? Color(0xFF4267B2)
-              : (isButtonEnabled ? appRed : appRed.withOpacity(0.5)),
+          primary: (isButtonEnabled ? appColor : appColor.withOpacity(0.5)),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       onPressed: onTap,
@@ -102,23 +99,19 @@ Widget authButton(String text,
     ),
   );
 }
-
 Widget authButtons(String text,
     {Function()? onTap,
-    double height = 50.0,
-    double fontSize = 14.0,
-    bool isButtonEnabled = false,
-    bool isFacebook = false}) {
-  return Container(
+    double height = 60.0,
+    double fontSize = 17.0,
+    bool isButtonEnabled = false,}) {
+  return SizedBox(
     width: double.infinity,
     height: height,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: isFacebook
-              ? Color(0xFF4267B2)
-              : (isButtonEnabled ? appRed : appRed.withOpacity(0.5)),
+          primary: (isButtonEnabled ? appColor : appColor.withOpacity(0.5)),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
       onPressed: onTap,
       child: Text(text,
           style: TextStyle(
@@ -136,7 +129,7 @@ Widget appHeader(double deckSize, double peopleSize) {
       Text(
         'The Deck',
         style:
-            TextStyle(color: appRed, fontFamily: 'Chewy', fontSize: deckSize),
+            TextStyle(color: appColor, fontFamily: 'Chewy', fontSize: deckSize),
       ),
       heightOne(),
       Text(

@@ -79,7 +79,7 @@ class AccountSetting extends StatelessWidget {
                   style: TextStyle(
                     fontSize: MySize.textSize(isLarge ? 3 : 4),
                     fontFamily: 'Poppins',
-                    color: appRed.withOpacity(0.8),
+                    color: appColor.withOpacity(0.8),
                     fontWeight: FontWeight.w700,
                   ),
                 ),

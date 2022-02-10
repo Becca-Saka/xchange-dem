@@ -26,14 +26,14 @@ void showLoadingDialogWithText({required String msg}) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(appRed),
+              valueColor: new AlwaysStoppedAnimation<Color>(appColor),
             ),
             SizedBox(
               height: 10,
             ),
             Text(
               '$msg Please wait...',
-              style: TextStyle(color: appRed),
+              style: TextStyle(color: appColor),
             )
           ],
         ),
@@ -49,14 +49,14 @@ void showLoadingDialog() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(
-              valueColor: new AlwaysStoppedAnimation<Color>(appRed),
+              valueColor: new AlwaysStoppedAnimation<Color>(appColor),
             ),
             SizedBox(
               height: 10,
             ),
             Text(
               ' Please wait...',
-              style: TextStyle(color: appRed),
+              style: TextStyle(color: appColor),
             )
           ],
         ),

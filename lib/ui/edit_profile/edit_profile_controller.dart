@@ -80,7 +80,7 @@ class EditProfileController extends GetxController {
         'Still Editing',
         'Please save your changes before leaving',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: appRed,
+        backgroundColor: appColor,
         borderRadius: 10,
         margin: EdgeInsets.all(10),
         borderColor: Colors.red,

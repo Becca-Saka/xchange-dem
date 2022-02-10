@@ -10,6 +10,7 @@ import 'package:xchange/barrel.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:xchange/ui/authentication/phone_signup_view.dart';
+import 'package:xchange/ui/authentication/user_info_view.dart';
 const bool USE_EMULATOR = false;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -18,9 +19,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init('userProfile');
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await GetStorage.init('userProfile');
   
   if (USE_EMULATOR) {
     runApp(
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
               title: 'The Deck',
               theme: ThemeData(
                 primaryColor: Color(0xffFF5757),
-                colorScheme: ColorScheme.light(primary: appRed),
+                colorScheme: ColorScheme.light(primary: appColor),
                 fontFamily: 'Poppins',
               ),
               // useInheritedMediaQuery: true, // Set to true
@@ -58,9 +59,9 @@ class MyApp extends StatelessWidget {
               //         return child!;
               //       });
               // },
-              home: PhoneSignUp(),
-              // initialRoute: AppPages.INITIAL,
-              // getPages: AppPages.routes,
+              initialRoute: AppPages.initial,
+              getPages: AppPages.routes,
+              // home: UserInfoView(),
             );
   }
 }
@@ -74,14 +75,14 @@ class MyAppLarge extends StatelessWidget {
               title: 'The Deck',
               theme: ThemeData(
                 primaryColor: Color(0xffFF5757),
-                colorScheme: ColorScheme.light(primary: appRed),
+                colorScheme: ColorScheme.light(primary: appColor),
                 fontFamily: 'Poppins',
               ),
               useInheritedMediaQuery: true, // Set to true
               locale: DevicePreview.locale(context), //
 
               builder: DevicePreview.appBuilder,
-              initialRoute: AppPages.INITIAL,
+              initialRoute: AppPages.initial,
               getPages: AppPages.routes,
             );
   }

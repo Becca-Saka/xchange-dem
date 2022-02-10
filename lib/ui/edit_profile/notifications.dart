@@ -86,7 +86,7 @@ class NotificationSetting extends StatelessWidget {
               : isSmall
                   ? 11
                   : 13),
-          activeColor: appRed,
+          activeColor: appColor,
           height: MySize.yMargin(isMedium ? 3.2 : 3.5),
           value: status,
           toggleSize: MySize.xMargin(isMedium ? 6 : 5),

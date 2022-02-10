@@ -20,6 +20,8 @@ UserDetails _$UserDetailsFromJson(Map json) => UserDetails(
           .toList(),
       fcmToken: json['fcmToken'] as String?,
       noOfCurrentMatches: json['noOfCurrentMatches'] as int? ?? 0,
+      phoneNumber: json['phoneNumber'] as String?,
+      inContact: json['inContact'] as bool? ?? false,
       long: (json['long'] as num?)?.toDouble(),
     );
 
@@ -28,6 +30,7 @@ Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
       'uid': instance.uid,
       'name': instance.name,
       'email': instance.email,
+      'phoneNumber': instance.phoneNumber,
       'noOfCurrentMatches': instance.noOfCurrentMatches,
       'imageUrl': instance.imageUrl,
       'fcmToken': instance.fcmToken,
@@ -35,4 +38,5 @@ Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
       'long': instance.long,
       'currentMatches': instance.currentMatches,
       'currentDeck': instance.currentDeck,
+      'inContact': instance.inContact,
     };

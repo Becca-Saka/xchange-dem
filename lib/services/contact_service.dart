@@ -3,7 +3,7 @@ import 'package:contacts_service/contacts_service.dart';
 
 class ContactService {
   //get user contact
-  Future<PermissionStatus> _getContactPermission() async {
+  Future<PermissionStatus> getContactPermission() async {
     PermissionStatus permission = await Permission.contacts.status;
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.permanentlyDenied) {
@@ -14,12 +14,14 @@ class ContactService {
     }
   }
 
-  getContactFromPhone() async {
-    if (await _getContactPermission() == PermissionStatus.granted) {
+  Future< List<Contact>? > getContactFromPhone() async {
+    if (await getContactPermission() == PermissionStatus.granted) {
       List<Contact> contacts = (await ContactsService.getContacts(
         withThumbnails: false,
       )).toList();
       return contacts;
+    }else{
+      return null;
     }
   }
 }

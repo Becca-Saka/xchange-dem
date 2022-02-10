@@ -54,7 +54,7 @@ Future<bool> requestLocationPermmission() async {
   if (permission == LocationPermission.deniedForever) {
     isGranted = false;
     Get.defaultDialog(
-      buttonColor: appRed,
+      buttonColor: appColor,
       onConfirm: () {
         Geolocator.openLocationSettings();
       },
@@ -65,7 +65,7 @@ Future<bool> requestLocationPermmission() async {
       contentPadding: EdgeInsets.all(22),
       textConfirm: 'Open App Settings',
       confirmTextColor: Colors.white,
-      cancelTextColor: appRed,
+      cancelTextColor: appColor,
       title: 'Location permissions are permanently denied',
       content: Text(
           'You need to grant access to continue. Please go to your settings and manually grant access to the app.'),

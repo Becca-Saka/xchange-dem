@@ -19,9 +19,9 @@ class _StartUpState extends State<StartUp> {
   checkLogin() async {
     final isLoggedIn = await AuthenticationService().checkLogin();
     if (isLoggedIn) {
-      Get.offAllNamed(Routes.HOME);
+      Get.offAllNamed(Routes.home);
     } else {
-      Get.offNamed(Routes.LOGIN);
+      Get.offNamed(Routes.onboarding);
     }
   }
 

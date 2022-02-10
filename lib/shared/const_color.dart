@@ -6,9 +6,9 @@
 // #A6A6A6
 import 'package:flutter/material.dart';
 
-Color appRed = Color(0xffFF5757);
-Color appGrey = Color(0xffD9D9D9);
-Color appOrange = Color(0xffFF914D);
-Color appBlue = Color(0xff38B6FF);
-Color white = Color(0xffFFFFFF);
-Color apptextGrey = Color(0xffA6A6A6);
+Color appColor = const Color(0xff6A1B9A);
+Color appGrey = const Color(0xffD9D9D9);
+Color appOrange = const Color(0xffFF914D);
+Color appBlue = const Color(0xff38B6FF);
+Color white = const Color(0xffFFFFFF);
+Color apptextGrey = const Color(0xffA6A6A6);

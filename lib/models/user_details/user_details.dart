@@ -7,12 +7,13 @@ part 'user_details.g.dart';
 class UserDetails {
   String? uid;
   String? name;
-  String? email;
+  String? email,phoneNumber;
   int noOfCurrentMatches;
   String? imageUrl, fcmToken;
   double? lat, long;
   List<String>? currentMatches;
   List<String>? currentDeck;
+  bool inContact;
   UserDetails(
       {this.uid,
       this.name,
@@ -23,6 +24,8 @@ class UserDetails {
       this.currentMatches,
       this.fcmToken,
       this.noOfCurrentMatches = 0,
+      this.phoneNumber,
+      this.inContact = false,
       this.long});
   factory UserDetails.fromJson(Map<dynamic, dynamic> json) =>
       _$UserDetailsFromJson(json);

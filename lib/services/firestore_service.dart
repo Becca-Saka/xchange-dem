@@ -13,7 +13,7 @@ class FirestoreService {
 
   Future<void> removeMatch(
       UserDetails removeUser, MatchDetails matchDetails) async {
-        //TODO remove match from user
+    //TODO remove match from user
     // final AuthController _controller = Get.find();
     // final currentUser = _controller.currentUser.value;
     // removeUser.currentMatches!.remove(currentUser.uid!);
@@ -34,8 +34,6 @@ class FirestoreService {
     //     FirebaseFunctions.instance.httpsCallable('recursiveDeleteDeck');
     // await callable.call({'path': 'Decks/${matchDetails.uid}'});
   }
-
- 
 
   Future updateIsNew(MatchDetails matchDetails) async {
     final AuthController _controller = Get.find();
@@ -123,10 +121,10 @@ class FirestoreService {
       },
     );
   }
-Future<MatchDetails> createChat(String id, UserDetails current) async {
-   
+
+  Future<MatchDetails> createChat(String id, UserDetails current) async {
     final doc = deckcollection.doc();
-    
+
     final message = MatchDetails(
       uid: doc.id,
       users: [current.uid!, id],
@@ -147,6 +145,7 @@ Future<MatchDetails> createChat(String id, UserDetails current) async {
 
     return message;
   }
+
   Future<MatchDetails> sendMessage(
       String message, MatchDetails? chatDetails, UserDetails userToMessage,
       {bool hasImage = false, String? imagePath}) async {
@@ -154,15 +153,15 @@ Future<MatchDetails> createChat(String id, UserDetails current) async {
     final currentUser = _controller.userDetails.value;
     MatchDetails matchDetails;
     String key;
-    if(chatDetails == null){
+    if (chatDetails == null) {
       matchDetails = await createChat(userToMessage.uid!, currentUser);
       key = matchDetails.uid!;
-    }else{
+    } else {
       key = chatDetails.uid!;
       matchDetails = chatDetails;
     }
 
-     var  docs = deckcollection.doc(key);
+    var docs = deckcollection.doc(key);
     final chatDoc = docs.collection('Chats').doc();
 
     final messageDetail = Message(
@@ -192,17 +191,17 @@ Future<MatchDetails> createChat(String id, UserDetails current) async {
         .whenComplete(() async => await docs.update(
               chatDetailsJson,
             ));
-            //TODO: Send message notification
-        // .whenComplete(() {
-      // if (userToMessage.recieveMessageNotification == true &&
-      //     userToMessage.recieveMessageNotification) {
-      //   HttpsCallable callable =
-      //       FirebaseFunctions.instance.httpsCallable('sendNewMessageAlert');
-      //   callable.call({
-      //     'path': userToMessage.fcmToken,
-      //     'name': userToMessage.name,
-      //   });
-      // }
+    //TODO: Send message notification
+    // .whenComplete(() {
+    // if (userToMessage.recieveMessageNotification == true &&
+    //     userToMessage.recieveMessageNotification) {
+    //   HttpsCallable callable =
+    //       FirebaseFunctions.instance.httpsCallable('sendNewMessageAlert');
+    //   callable.call({
+    //     'path': userToMessage.fcmToken,
+    //     'name': userToMessage.name,
+    //   });
+    // }
     //   return;
     // });
 
@@ -226,10 +225,20 @@ Future<MatchDetails> createChat(String id, UserDetails current) async {
 
   Future<void> blockUser(
       UserDetails removeUser, MatchDetails matchDetails) async {
-        //TODO: block user
+    //TODO: block user
     // final AuthController _controller = Get.find();
 
     // _controller.currentUser.value.blockedUsers.add(removeUser.uid!);
     // await removeMatch(removeUser, matchDetails);
+  }
+
+  Future<List<UserDetails>> checkUsersInDataBase(List<String> phone) async {
+    final user =
+        await usercollection.where('phoneNumber', whereIn: phone).get();
+    return user.docs.map((e) {
+      final users =UserDetails.fromJson(e.data());
+      users.inContact = true;
+      return users;
+    }).toList();
   }
 }

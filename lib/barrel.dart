@@ -27,5 +27,5 @@ export 'package:xchange/services/internet_services.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 // export 'package:cloud_functions/cloud_functions.dart';
 export 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
-
+export 'package:xchange/services/contact_service.dart';
 export 'package:xchange/services/local_storage_service.dart';

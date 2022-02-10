@@ -44,7 +44,7 @@ class HomeView extends GetView<AccountController> {
                               child: Text('${user.name!.substring(0, 1)}'),
                             ),
                             title: Text('${user.name}'),
-                            subtitle: Text('${user.email}'),
+                            subtitle: Text('${user.email}, inContact ${user.inContact}, phone ${user.phoneNumber}'),
                             onTap: () => controller.navigateToChat(user),
                           );
                         },

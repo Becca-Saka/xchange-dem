@@ -121,7 +121,7 @@ class ChatController extends GetxController {
     showLoadingDialogWithText(msg: 'Blocking ${currentChat.name}');
     await FirestoreService()
         .blockUser(currentChat, matchDetails!)
-        .whenComplete(() => Get.offAllNamed(Routes.HOME, arguments: 'blocked'));
+        .whenComplete(() => Get.offAllNamed(Routes.home, arguments: 'blocked'));
   }
 
   Future<void> showConfirmationDialog() async {
