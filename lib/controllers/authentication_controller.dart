@@ -19,6 +19,7 @@ class AuthenticationController extends GetxController {
   RxBool isRecoverButtonEnable = false.obs;
   late UserCredential currentUserCredentials;
   String? phoneNumber, otp, verificationId;
+  String countryCode='+234';
   RxString path = ''.obs;
   bool isSignUp = false;
   final ContactService _contactService = ContactService();

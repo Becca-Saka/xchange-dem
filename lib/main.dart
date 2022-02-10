@@ -11,6 +11,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:xchange/ui/authentication/phone_signup_view.dart';
 import 'package:xchange/ui/authentication/user_info_view.dart';
+
+import 'ui/lib_phone.dart';
+
 const bool USE_EMULATOR = false;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -22,7 +25,7 @@ Future<void> main() async {
   await GetStorage.init('userProfile');
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  
+
   if (USE_EMULATOR) {
     runApp(
       DevicePreview(
@@ -31,7 +34,7 @@ Future<void> main() async {
       ),
     );
   } else {
-    runApp(MyApp());
+    runApp(MyLibApp());
   }
 }
 //TODO: Update facebook configuration in ios
@@ -41,28 +44,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return  GetMaterialApp(
-              title: 'The Deck',
-              theme: ThemeData(
-                primaryColor: Color(0xffFF5757),
-                colorScheme: ColorScheme.light(primary: appColor),
-                fontFamily: 'Poppins',
-              ),
-              // useInheritedMediaQuery: true, // Set to true
-              // locale: DevicePreview.locale(context), //
+    return GetMaterialApp(
+      title: 'The Deck',
+      theme: ThemeData(
+        primaryColor: Color(0xffFF5757),
+        colorScheme: ColorScheme.light(primary: appColor),
+        fontFamily: 'Poppins',
+      ),
+      // useInheritedMediaQuery: true, // Set to true
+      // locale: DevicePreview.locale(context), //
 
-              // builder: DevicePreview.appBuilder,
-              // builder: (context, child) {
-              //   return ConnectionWidget(
-              //       dismissOfflineBanner: false,
-              //       builder: (BuildContext context, bool isOnline) {
-              //         return child!;
-              //       });
-              // },
-              initialRoute: AppPages.initial,
-              getPages: AppPages.routes,
-              // home: UserInfoView(),
-            );
+      // builder: DevicePreview.appBuilder,
+      // builder: (context, child) {
+      //   return ConnectionWidget(
+      //       dismissOfflineBanner: false,
+      //       builder: (BuildContext context, bool isOnline) {
+      //         return child!;
+      //       });
+      // },
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
+      // home: UserInfoView(),
+    );
   }
 }
 
@@ -71,20 +74,20 @@ class MyAppLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return  GetMaterialApp(
-              title: 'The Deck',
-              theme: ThemeData(
-                primaryColor: Color(0xffFF5757),
-                colorScheme: ColorScheme.light(primary: appColor),
-                fontFamily: 'Poppins',
-              ),
-              useInheritedMediaQuery: true, // Set to true
-              locale: DevicePreview.locale(context), //
+    return GetMaterialApp(
+      title: 'The Deck',
+      theme: ThemeData(
+        primaryColor: Color(0xffFF5757),
+        colorScheme: ColorScheme.light(primary: appColor),
+        fontFamily: 'Poppins',
+      ),
+      useInheritedMediaQuery: true, // Set to true
+      locale: DevicePreview.locale(context), //
 
-              builder: DevicePreview.appBuilder,
-              initialRoute: AppPages.initial,
-              getPages: AppPages.routes,
-            );
+      builder: DevicePreview.appBuilder,
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
+    );
   }
 }
 

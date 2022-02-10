@@ -38,12 +38,10 @@ class AccountController extends GetxController {
     if (userContacts != null) {
       userContacts.removeWhere((element) => element.phones == null);
       userContact = userContacts;
-      final phoneNumbers = userContacts
-          .map((e) {
-            log('name: ${e.displayName}');
-            return e.phones![0].value!.removeAllWhitespace;
-          })
-          .toList();
+      final phoneNumbers = userContacts.map((e) {
+        log('name: ${e.displayName}');
+        return e.phones![0].value!.removeAllWhitespace;
+      }).toList();
       log('phone numbers: $phoneNumbers');
       final result = await _firestoreService.checkUsersInDataBase(phoneNumbers);
       usersInChat.value = [...usersInChat, ...result];

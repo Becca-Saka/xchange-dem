@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'user_details.g.dart';
 
 @JsonSerializable(
@@ -7,13 +8,15 @@ part 'user_details.g.dart';
 class UserDetails {
   String? uid;
   String? name;
-  String? email,phoneNumber;
+  String? email, phoneNumber, countryCode;
   int noOfCurrentMatches;
   String? imageUrl, fcmToken;
   double? lat, long;
   List<String>? currentMatches;
   List<String>? currentDeck;
+  @JsonKey(ignore: true)
   bool inContact;
+
   UserDetails(
       {this.uid,
       this.name,
@@ -25,11 +28,15 @@ class UserDetails {
       this.fcmToken,
       this.noOfCurrentMatches = 0,
       this.phoneNumber,
+      this.countryCode,
       this.inContact = false,
       this.long});
+
   factory UserDetails.fromJson(Map<dynamic, dynamic> json) =>
       _$UserDetailsFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserDetailsToJson(this);
+
   @override
   String toString() {
     return 'uid: $uid, name: $name, lat: $lat, long: $long, currentmatches: $currentMatches';

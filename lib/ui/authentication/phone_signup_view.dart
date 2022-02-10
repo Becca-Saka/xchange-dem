@@ -66,8 +66,9 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                   initialCountryCode: 'NG',
                                   onChanged: (phone) {
                                     controller.enablePhoneButton();
-                                    controller.phoneNumber =
-                                        phone.completeNumber;
+                                    controller.phoneNumber = phone.number;
+                                    controller.countryCode = phone.countryCode;
+                                    log('${controller.countryCode} gg ${controller.phoneNumber}, ${phone.completeNumber} ${phone.toString()}');
                                   },
                                 ),
                                 const SizedBox(height: 25),
