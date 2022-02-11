@@ -5,44 +5,57 @@ import 'package:xchange/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/ui/chat/view_image.dart';
 
-
-
 class ChatController extends GetxController {
   TextEditingController chat = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final FirestoreService _firestoreService = FirestoreService();
 
-    MatchDetails? matchDetails;
+  Rx<MatchDetails?> matchDetails = Rx<MatchDetails?>(null);
   RxList<Message> messages = <Message>[].obs;
   RxList<Message> chatMessages = <Message>[].obs;
- static final AccountController _accountController = Get.find();
+  static final AccountController _accountController = Get.find();
   RxString currentImage = ''.obs;
- final UserDetails _currentUser  = _accountController.userDetails.value;
- UserDetails get currentUser => _currentUser;
- final UserDetails _currentChat = _accountController.currentChat;
- UserDetails get currentChat => _currentChat;
+  final UserDetails _currentUser = _accountController.userDetails.value;
+  UserDetails get currentUser => _currentUser;
+  final UserDetails _currentChat = _accountController.currentChat;
+  UserDetails get currentChat => _currentChat;
   final resp = ''.obs;
   @override
   void onInit() {
+    getMatchDetails();
     //  matchDetails = Get.arguments['match'];
     super.onInit();
   }
 
+  getMatchDetails() async {
+    if (currentChat.currentDeck != null) {
+      final match = currentChat.currentDeck!
+          .where((element) => currentUser.currentDeck!.contains(element)).toList();
+       if(match.isNotEmpty){
+      final details = await _firestoreService.deckcollection.doc(match.first).get();
+      matchDetails.value = MatchDetails.fromJson(details.data()!);
+
+       }
+    }
+  }
 
   getInitialMessage() async {
-    messages.value = await _firestoreService.getFirstMessage(matchDetails!.uid!);
+    messages.value =
+        await _firestoreService.getFirstMessage(matchDetails.value!.uid!);
   }
 
   updateIsRead() {
     log('updateIsRead');
-    if (matchDetails!=null && matchDetails!.unReadMessagesList != null &&
-        matchDetails!.messageId != currentUser.uid) {
-      _firestoreService.updateReadMessage(matchDetails!.uid!);
+    if (matchDetails.value != null &&
+        matchDetails.value!.unReadMessagesList != null &&
+        matchDetails.value!.messageId != currentUser.uid) {
+      _firestoreService.updateReadMessage(matchDetails.value!.uid!);
     }
   }
 
-  Stream<List<Message>> getMessageStream() =>
-      _firestoreService.getMessage(matchDetails!.uid!).asBroadcastStream();
+  Stream<List<Message>> getMessageStream() => _firestoreService
+      .getMessage(matchDetails.value!.uid!)
+      .asBroadcastStream();
 
   Future<void> sendMessage({String? url}) async {
     final text = chat.text;
@@ -55,7 +68,7 @@ class ChatController extends GetxController {
           time: DateTime.now().toString());
       messages.add(temp);
       chat.clear();
-      await _firestoreService.sendMessage(text, matchDetails, currentChat,
+     matchDetails.value = await _firestoreService.sendMessage(text, matchDetails.value, currentChat,
           hasImage: url != null, imagePath: url);
     }
   }
@@ -120,7 +133,7 @@ class ChatController extends GetxController {
   Future<void> blockUser() async {
     showLoadingDialogWithText(msg: 'Blocking ${currentChat.userName}');
     await FirestoreService()
-        .blockUser(currentChat, matchDetails!)
+        .blockUser(currentChat, matchDetails.value!)
         .whenComplete(() => Get.offAllNamed(Routes.home, arguments: 'blocked'));
   }
 

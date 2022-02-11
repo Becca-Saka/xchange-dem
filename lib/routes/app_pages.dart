@@ -10,9 +10,6 @@ import 'package:xchange/ui/authentication/user_info_view.dart';
 import 'package:xchange/ui/authentication/verify_phone_view.dart';
 import 'package:xchange/ui/chat/chat_view.dart';
 import 'package:xchange/ui/chat/view_user.dart';
-import 'package:xchange/ui/edit_profile/account_settings.dart';
-import 'package:xchange/ui/edit_profile/edit_profile_controller.dart';
-import 'package:xchange/ui/edit_profile/edit_profile_view.dart';
 import 'package:xchange/ui/home/home_view.dart';
 import 'package:xchange/ui/authentication/startup.dart';
 
@@ -65,15 +62,6 @@ class AppPages {
     GetPage(
       name: Routes.VIEWUSER,
       page: () => ViewUser(),
-    ),
-    GetPage(
-      name: Routes.EDITPROFILE,
-      page: () => EditProfileView(),
-      binding: EditProfileBinding(),
-    ),
-    GetPage(
-      name: Routes.ACCOUNTSETTING,
-      page: () => AccountSetting(),
     ),
   ];
 }

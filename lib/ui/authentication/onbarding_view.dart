@@ -1,7 +1,4 @@
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:xchange/barrel.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:xchange/controllers/authentication_controller.dart';
 
 class OnboardingView extends GetView<AuthenticationController> {
   const OnboardingView({Key? key}) : super(key: key);
@@ -45,13 +42,12 @@ class OnboardingView extends GetView<AuthenticationController> {
                       const Spacer(),
                       authButtons(
                         'Create Account',
-                        onTap: ()=>controller.navigateToPhonePage(true),
+                        onTap: () => controller.navigateToPhonePage(true),
                         isButtonEnabled: controller.isButtonEnable.value,
                       ),
                       const SizedBox(height: 15),
-                      
                       InkWell(
-                        onTap:()=> controller.navigateToPhonePage(false),
+                        onTap: () => controller.navigateToPhonePage(false),
                         child: Text('Login',
                             style: TextStyle(
                                 fontSize: 14,

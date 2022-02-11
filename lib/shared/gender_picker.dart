@@ -33,7 +33,7 @@ class _GenderPickerState extends State<GenderPicker> {
                 style: TextStyle(
                     height: 1, letterSpacing: 0.2, color: apptextGrey)),
             value: selectedGender == 'Gender' ? null : selectedGender,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Colors.black,
                 fontFamily: 'League Spartan',
                 fontSize: 16,

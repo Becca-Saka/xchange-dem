@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:xchange/barrel.dart';
 
 class AccountController extends GetxController {
@@ -17,20 +15,10 @@ class AccountController extends GetxController {
     final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
     userDetails.value =
         UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
-    // getUsersInDatabase();
     getRegisteredUserContacts();
     super.onInit();
   }
 
-  getUsersInDatabase() async {
-    final data = await FirebaseFirestore.instance.collection('Users').get();
-    if (data.docs.isNotEmpty) {
-      usersInChat.value =
-          data.docs.map((e) => UserDetails.fromJson(e.data())).toList();
-      usersInChat
-          .removeWhere((element) => element.uid == userDetails.value.uid);
-    }
-  }
 
   navigateToChat(UserDetails user) {
     currentChat = user;
@@ -45,6 +33,7 @@ class AccountController extends GetxController {
   Future<void> getRegisteredUserContacts() async {
     final phoneNumbers = await _contactService.getContactNumbers();
     final result = await _firestoreService.checkUsersInDataBase(phoneNumbers);
+    result.removeWhere((element) => element.uid == userDetails.value.uid);
     result.map((e) {
       e.nameInContact = getUserContactName(e.phoneNumber!);
     }).toList();

@@ -1,4 +1,5 @@
-import 'dart:io';import 'package:xchange/barrel.dart';
+import 'dart:io';
+import 'package:xchange/barrel.dart';
 
 //Defining sizes
 Widget heightOne() {
@@ -34,6 +35,7 @@ Widget heightMin({double size = 3}) {
 Widget heightMini({double size = 15}) {
   return SizedBox(height: size);
 }
+
 Widget widthMini({double size = 15}) {
   return SizedBox(
     width: size,
@@ -76,11 +78,13 @@ Widget customTextField(
   );
 }
 
-Widget authButton(String text,
-    {Function()? onTap,
-    double height = 50.0,
-    double fontSize = 17.0,
-    bool isButtonEnabled = false,}) {
+Widget authButton(
+  String text, {
+  Function()? onTap,
+  double height = 50.0,
+  double fontSize = 17.0,
+  bool isButtonEnabled = false,
+}) {
   return SizedBox(
     width: double.infinity,
     height: height,
@@ -99,11 +103,14 @@ Widget authButton(String text,
     ),
   );
 }
-Widget authButtons(String text,
-    {Function()? onTap,
-    double height = 60.0,
-    double fontSize = 17.0,
-    bool isButtonEnabled = false,}) {
+
+Widget authButtons(
+  String text, {
+  Function()? onTap,
+  double height = 60.0,
+  double fontSize = 17.0,
+  bool isButtonEnabled = false,
+}) {
   return SizedBox(
     width: double.infinity,
     height: height,
@@ -122,7 +129,7 @@ Widget authButtons(String text,
     ),
   );
 }
-
+//TODO:remove
 Widget appHeader(double deckSize, double peopleSize) {
   return Column(
     children: [
@@ -183,5 +190,12 @@ Widget backButton({Function()? onTap}) {
         height: 2,
       ),
     ),
+  );
+}
+
+CircleAvatar profileAvatar(String? url, String name) {
+  return CircleAvatar(
+    backgroundImage: url != null ? NetworkImage(url) : null,
+    child: url == null ? Text(name.substring(0, 1)) : null,
   );
 }
