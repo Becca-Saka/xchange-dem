@@ -19,7 +19,6 @@ class AccountController extends GetxController {
     super.onInit();
   }
 
-
   navigateToChat(UserDetails user) {
     currentChat = user;
     Get.toNamed(Routes.CHAT,
@@ -32,12 +31,14 @@ class AccountController extends GetxController {
 
   Future<void> getRegisteredUserContacts() async {
     final phoneNumbers = await _contactService.getContactNumbers();
-    final result = await _firestoreService.checkUsersInDataBase(phoneNumbers);
-    result.removeWhere((element) => element.uid == userDetails.value.uid);
-    result.map((e) {
-      e.nameInContact = getUserContactName(e.phoneNumber!);
-    }).toList();
-    usersInChat.value = [...usersInChat, ...result];
+    if (phoneNumbers.isNotEmpty) {
+      final result = await _firestoreService.checkUsersInDataBase(phoneNumbers);
+      result.removeWhere((element) => element.uid == userDetails.value.uid);
+      result.map((e) {
+        e.nameInContact = getUserContactName(e.phoneNumber!);
+      }).toList();
+      usersInChat.value = [...usersInChat, ...result];
+    }
     // log('result: $result');
   }
 

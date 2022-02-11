@@ -1,3 +1,4 @@
+import 'package:coolicons/coolicons.dart';
 import 'package:xchange/barrel.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -6,91 +7,98 @@ class PhoneSignUp extends GetView<AuthenticationController> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmall = MySize.isSmall(context);
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: LayoutBuilder(builder: (context, constraints) {
-            return SingleChildScrollView(
-                child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: IntrinsicHeight(
-                child: Obx(
-                  () => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(),
-                      SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: CircleAvatar(
-                              backgroundColor: appColor.withOpacity(0.2),
-                              child: SvgPicture.asset(
-                                  'assets/images/svg/put_no.svg',
-                                  height: 120,
-                                  width: 120,
-                                  fit: BoxFit.contain))),
-                      const SizedBox(height: 60),
-                      Text(controller.isSignUp ? 'Registration' : 'Login',
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 5),
-                      const Text('Enter your phone number to continue',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w100)),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 25.0, vertical: 30.0),
-                            child: Column(
-                              children: [
-                                IntlPhoneField(
-                                  disableLengthCheck: true,
-                                  showDropdownIcon: false,
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  flagsButtonPadding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(),
-                                    ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        child: LayoutBuilder(builder: (context, constraints) {
+          return SingleChildScrollView(
+              child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(
+              child: Obx(
+                () => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: kToolbarHeight),
+                    SizedBox(
+                        height: isSmall ? 140 : 200,
+                        width: isSmall ? 140 : 200,
+                        child: CircleAvatar(
+                            backgroundColor: appColor.withOpacity(0.2),
+                            child: SvgPicture.asset(
+                                'assets/images/svg/put_no.svg',
+                                height: isSmall ? 60 : 120,
+                                width: isSmall ? 60 : 120,
+                                fit: BoxFit.contain))),
+                    SizedBox(height: isSmall ? 35 : 60),
+                    Text(controller.isSignUp ? 'Registration' : 'Login',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 5),
+                    const Text(
+                        'Please confirm your country code and enter your phone number',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400)),
+                    SizedBox(height: isSmall ? 6 : 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25.0, vertical: 30.0),
+                          child: Column(
+                            children: [
+                              IntlPhoneField(
+                                disableLengthCheck: true,
+                                showDropdownIcon: false,
+                                initialValue: controller.phoneNumber,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                flagsButtonPadding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(),
                                   ),
-                                  initialCountryCode: controller.countryCode,
-                                  onChanged: (phone) {
-                                    controller.enablePhoneButton();
-                                    controller.phoneNumber =
-                                        phone.completeNumber;
-                                    controller.countryCode =
-                                        phone.countryISOCode;
-                                  },
                                 ),
-                                const SizedBox(height: 25),
-                                const SizedBox(height: 16),
-                                authButtons(
-                                  'Continue',
+                                initialCountryCode: controller.countryCode,
+                                onChanged: (phone) {
+                                  controller.enablePhoneButton();
+                                  controller.phoneNumber = phone.completeNumber;
+                                  controller.countryCode = phone.countryISOCode;
+                                },
+                                onSubmitted: (val)=> controller.verifyPhoneNUmber(),
+                              ),
+                              const SizedBox(height: 40),
+                              authButtons('Continue',
                                   onTap: controller.verifyPhoneNUmber,
                                   isButtonEnabled:
                                       controller.isPhoneButtonEnable.value,
-                                ),
-                              ],
-                            ),
+                                  loadAnimation:
+                                      controller.loadWithAnimation.value),
+                            ],
                           ),
                         ),
                       ),
-                      const Spacer(),
-                    ],
-                  ),
+                    ),
+                    const Spacer(),
+                  ],
                 ),
               ),
-            ));
-          }),
-        ),
+            ),
+          ));
+        }),
       ),
     );
   }

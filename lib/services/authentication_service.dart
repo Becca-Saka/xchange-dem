@@ -14,36 +14,32 @@ class AuthenticationService {
 //TODO:add loading indicator
 
   Future<void> verifyPhoneNumber(String text,
-      {required Function(String verificationId) onCodeSent}) async {
+      {required Function(String verificationId, {int? token}) onCodeSent,
+      required Function() onError,
+      int? resendToken}) async {
     try {
       await auth.verifyPhoneNumber(
         phoneNumber: text,
         timeout: const Duration(seconds: 60),
-        verificationCompleted: (AuthCredential credential) {
-          log('verification completed');
-          log('credential: $credential');
-          auth.signInWithCredential(credential).then((UserCredential result) {
-            log('result: $result');
-            Get.offAllNamed(Routes.LOGIN);
-          });
-        },
+        forceResendingToken: resendToken,
+        verificationCompleted: (AuthCredential credential) {},
         verificationFailed: (FirebaseAuthException exception) {
-          log('verification failed');
-          log('exception: $exception');
+          final errorMessage = getMessageFromErrorCode(exception);
+          errorSnackbar(msg: errorMessage);
+          onError();
         },
         codeSent: (String verificationId, int? forceResendingToken) {
-          log('code sent');
-          log('verificationId: $verificationId');
-          log('forceResendingToken: $forceResendingToken');
-          onCodeSent(verificationId);
+          onCodeSent(
+            verificationId,
+          );
         },
         codeAutoRetrievalTimeout: (String verificationId) {
-          log('code auto retrieval timeout');
-          log('verificationId: $verificationId');
+          onCodeSent(
+            verificationId,
+          );
         },
       );
     } on FirebaseAuthException catch (e) {
-      log('$e');
       final errorMessage = getMessageFromErrorCode(e);
       errorSnackbar(msg: errorMessage);
     } catch (e) {
@@ -52,7 +48,10 @@ class AuthenticationService {
   }
 
   Future<UserCredential> verifyOTP(
-      String verificationId, String codeSent) async {
+    String verificationId,
+    String codeSent, {
+    required Function() onError,
+  }) async {
     try {
       return await auth.signInWithCredential(PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: codeSent));
@@ -60,9 +59,9 @@ class AuthenticationService {
       log('$e');
       final errorMessage = getMessageFromErrorCode(e);
       errorSnackbar(msg: errorMessage);
+      onError();
       rethrow;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

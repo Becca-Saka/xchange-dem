@@ -110,25 +110,48 @@ Widget authButtons(
   double height = 60.0,
   double fontSize = 17.0,
   bool isButtonEnabled = false,
+  bool loadAnimation = false,
 }) {
-  return SizedBox(
-    width: double.infinity,
-    height: height,
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          primary: (isButtonEnabled ? appColor : appColor.withOpacity(0.5)),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-      onPressed: onTap,
-      child: Text(text,
-          style: TextStyle(
-              letterSpacing: 1.2,
-              color: Colors.white,
-              fontFamily: 'League Spartan',
-              fontSize: fontSize)),
-    ),
+  return AnimatedSwitcher(
+    duration: const Duration(milliseconds: 500),
+    transitionBuilder: (Widget child, Animation<double> animation) {
+      return ScaleTransition(
+        child: child,
+        scale: animation,
+      );
+    },
+    child: loadAnimation
+        ? Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30), color: appColor),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(
+                  backgroundColor: appColor,
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white)),
+            ),
+          )
+        : SizedBox(
+            width: double.infinity,
+            height: height,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: appColor,
+                  onSurface: appColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30))),
+              onPressed: isButtonEnabled ? onTap : null,
+              child: Text(text,
+                  style: TextStyle(
+                      letterSpacing: 1.2,
+                      color: Colors.white,
+                      fontFamily: 'League Spartan',
+                      fontSize: fontSize)),
+            ),
+          ),
   );
 }
+
 //TODO:remove
 Widget appHeader(double deckSize, double peopleSize) {
   return Column(

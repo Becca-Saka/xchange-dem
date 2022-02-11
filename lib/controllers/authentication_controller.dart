@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:xchange/barrel.dart';
-import 'package:xchange/services/contact_service.dart';
 
 class AuthenticationController extends GetxController {
   Rx<UserDetails> userDetails = Rx<UserDetails>(UserDetails());
@@ -17,13 +16,16 @@ class AuthenticationController extends GetxController {
   RxBool isProfileButtonEnable = false.obs;
   RxBool isButtonEnable = false.obs;
   RxBool isRecoverButtonEnable = false.obs;
+  RxBool loadWithAnimation = false.obs;
   late UserCredential currentUserCredentials;
   String? phoneNumber, otp, verificationId;
   String countryCode = 'NG';
+  int? resendToken;
   RxString path = ''.obs;
   bool isSignUp = false;
   final ContactService _contactService = ContactService();
-
+  RxInt timeTillResendToken = 60.obs;
+  Timer? _timer;
   navigateToPhonePage(bool signUp) {
     isSignUp = signUp;
     Get.toNamed(Routes.authentication);
@@ -37,14 +39,6 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  enablePhoneVerifyButton() {
-    if (otp != null && otp!.length >= 6) {
-      isPhoneVerifyButtonEnable.value = true;
-    } else {
-      isPhoneVerifyButtonEnable.value = false;
-    }
-  }
-
   enableProfileButton() {
     if (nameController.text.isNotEmpty) {
       isProfileButtonEnable.value = true;
@@ -55,13 +49,62 @@ class AuthenticationController extends GetxController {
 
   Future<void> verifyPhoneNUmber() async {
     if (isPhoneButtonEnable.value) {
+      loadWithAnimation.value = true;
       await _authenticationService.verifyPhoneNumber(phoneNumber!,
-          onCodeSent: (String id) {
+          onCodeSent: (String id, {int? token}) {
         verificationId = id;
+        resendToken = token;
+        loadWithAnimation.value = false;
         pageController.nextPage(
             duration: const Duration(milliseconds: 500), curve: Curves.ease);
+
+        timeTillResendToken.value = 60;
+        startResendTokenTimer();
+      }, onError: () {
+        loadWithAnimation.value = false;
       });
     }
+  }
+
+  Future<void> resendVerifyPhoneNUmber() async {
+    if (isPhoneVerifyButtonEnable.value) {
+      loadWithAnimation.value = true;
+      await _authenticationService.verifyPhoneNumber(phoneNumber!,
+          onCodeSent: (String id, {int? token}) {
+            verificationId = id;
+            resendToken = token;
+            loadWithAnimation.value = false;
+
+            timeTillResendToken.value = 60;
+            startResendTokenTimer();
+          },
+          resendToken: resendToken,
+          onError: () {
+            loadWithAnimation.value = false;
+            if (_timer != null) {
+              _timer!.cancel();
+              timeTillResendToken.value = 60;
+              isPhoneVerifyButtonEnable.value = false;
+            }
+          });
+    }
+  }
+
+  startResendTokenTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+      timeTillResendToken.value = 60;
+      isPhoneVerifyButtonEnable.value = false;
+    }
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timeTillResendToken.value == 0) {
+        timer.cancel();
+
+        isPhoneVerifyButtonEnable.value = true;
+      } else {
+        timeTillResendToken.value--;
+      }
+    });
   }
 
   goBackPage() {
@@ -69,12 +112,18 @@ class AuthenticationController extends GetxController {
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
-  Future<void> verifyOTP() async {
-    if (isPhoneVerifyButtonEnable.value) {
+  Future<void> verifyOTP(String? code) async {
+    if (code != null && otp! == code) {
+      loadWithAnimation.value = true;
       final currentUser = await _authenticationService.verifyOTP(
         verificationId!,
         otp!,
+        onError: () {
+          loadWithAnimation.value = false;
+        },
       );
+
+      loadWithAnimation.value = false;
       if (currentUser.user != null) {
         currentUserCredentials = currentUser;
         if (isSignUp) {

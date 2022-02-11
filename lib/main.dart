@@ -72,8 +72,11 @@ class MyAppLarge extends StatelessWidget {
     return GetMaterialApp(
       title: 'The Deck',
       theme: ThemeData(
-        primaryColor: Color(0xffFF5757),
+        primaryColor: appColor,
         colorScheme: ColorScheme.light(primary: appColor),
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
         fontFamily: 'Poppins',
       ),
       useInheritedMediaQuery: true, // Set to true
