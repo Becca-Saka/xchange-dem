@@ -56,6 +56,7 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                   // controller: controller.phoneController,
                                   disableLengthCheck: true,
                                   showDropdownIcon: false,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   flagsButtonPadding:
                                       const EdgeInsets.symmetric(horizontal: 5),
                                   decoration: const InputDecoration(
@@ -63,13 +64,12 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                       borderSide: BorderSide(),
                                     ),
                                   ),
-                                  initialCountryCode: 'NG',
+                                  initialCountryCode: controller.countryCode,
                                   onChanged: (phone) {
                                     controller.enablePhoneButton();
-                                    controller.phoneNumber = phone.number;
-                                    controller.countryCode = phone.countryCode;
-                                    log('${controller.countryCode} gg ${controller.phoneNumber}, ${phone.completeNumber} ${phone.toString()}');
-                                  },
+                                    controller.phoneNumber = phone.completeNumber;
+                                    controller.countryCode = phone.countryISOCode;
+                                 },
                                 ),
                                 const SizedBox(height: 25),
                                 const SizedBox(height: 16),

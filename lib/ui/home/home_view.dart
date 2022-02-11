@@ -41,10 +41,14 @@ class HomeView extends GetView<AccountController> {
                           final user = controller.usersInChat[index];
                           return ListTile(
                             leading: CircleAvatar(
-                              child: Text('${user.name!.substring(0, 1)}'),
+                              backgroundImage: user.imageUrl != null
+                                  ? NetworkImage(user.imageUrl!)
+                                  : null,
+                              child: user.imageUrl == null
+                                  ? Text(user.nameInContact!.substring(0, 1)):null,
                             ),
-                            title: Text('${user.name}'),
-                            subtitle: Text('${user.email}, inContact ${user.inContact}, phone ${user.phoneNumber}'),
+                            title: Text('${user.nameInContact}'),
+                            subtitle: Text('${user.phoneNumber}'),
                             onTap: () => controller.navigateToChat(user),
                           );
                         },

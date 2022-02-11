@@ -100,7 +100,7 @@ class ChatController extends GetxController {
               url: element.imageUrl!,
               sentBy: element.senderId == currentUser.uid
                   ? 'You'
-                  : currentChat.name!,
+                  : currentChat.userName!,
               time:
                   '${readTimeStampDaysOnly(element.time)},  ${DateFormat.Hm().format(parseTimeStamp(element.time))}',
             ),
@@ -118,7 +118,7 @@ class ChatController extends GetxController {
 
   void goBack() => Get.back();
   Future<void> blockUser() async {
-    showLoadingDialogWithText(msg: 'Blocking ${currentChat.name}');
+    showLoadingDialogWithText(msg: 'Blocking ${currentChat.userName}');
     await FirestoreService()
         .blockUser(currentChat, matchDetails!)
         .whenComplete(() => Get.offAllNamed(Routes.home, arguments: 'blocked'));
@@ -128,7 +128,7 @@ class ChatController extends GetxController {
     Get.dialog(
       AlertDialog(
         title: Text(
-          'Block ${currentChat.name}?',
+          'Block ${currentChat.userName}?',
           style: const TextStyle(
             fontSize: 17.5,
             fontFamily: 'Poppins',

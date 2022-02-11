@@ -339,6 +339,7 @@ class _MyLibAppState extends State<MyLibApp> {
                               hintText: placeholderHint,
                             ),
                             inputFormatters: [
+                              
                               LibPhonenumberTextFormatter(
                                 phoneNumberType: globalPhoneType,
                                 phoneNumberFormat: globalPhoneFormat,

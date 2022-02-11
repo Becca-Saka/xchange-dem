@@ -38,7 +38,7 @@ class ChatView extends GetView<ChatController> {
               Expanded(
                 child: Center(
                   child: Text(
-                    '${controller.currentChat.name}',
+                    '${controller.currentChat.userName}',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: isSmall

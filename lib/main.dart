@@ -34,7 +34,7 @@ Future<void> main() async {
       ),
     );
   } else {
-    runApp(MyLibApp());
+    runApp(MyApp());
   }
 }
 //TODO: Update facebook configuration in ios

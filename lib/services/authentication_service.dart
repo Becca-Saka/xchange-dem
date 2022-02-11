@@ -56,7 +56,7 @@ class AuthenticationService {
   ) async {
     UserDetails userDetails = UserDetails(
       email: email,
-      name: name,
+      userName: name,
       currentMatches: [],
       currentDeck: [],
       lat: null,
@@ -309,11 +309,11 @@ class AuthenticationService {
 
   Future<void> logout() async {
     try {
-      showLoadingDialogWithText(msg: 'Logging in,');
+      // showLoadingDialogWithText(msg: 'Logging in,');
 
       await auth.signOut().whenComplete(() {
         box.erase();
-        Get.offAllNamed(Routes.LOGIN);
+        Get.offAllNamed(Routes.onboarding);
       });
     } on FirebaseAuthException catch (e) {
       Get.close(1);
@@ -422,21 +422,22 @@ class AuthenticationService {
   }
 
   Future<void> saveUser(
-      String name, UserCredential userCredential, String? path) async {
+      String name, UserCredential userCredential, String? path, String countryCode) async {
     try {
       User user = userCredential.user!;
       UserDetails userDetails = UserDetails(
-        name: name,
+        userName: name,
         currentMatches: [],
         currentDeck: [],
         lat: null,
         long: null,
         uid: user.uid,
         phoneNumber: user.phoneNumber,
+        countryCode: countryCode
       );
       if (path != null && path != '') {
-        log('path is not null');
-        userDetails.imageUrl = await saveProfileImage(path, user.uid);
+        log('path is not null$path');
+        userDetails.imageUrl = await saveProfilePicture(path, user.uid);
       }
 
       await firestore
@@ -448,6 +449,20 @@ class AuthenticationService {
       log('$e');
     }
   }
+  Future<String> saveProfilePicture(String path, String id) async {
+    storage.Reference storageReference = storage.FirebaseStorage.instance
+        .ref()
+        .child('User\'s')
+        .child(id)
+        .child('${Timestamp.now().microsecondsSinceEpoch}');
+
+    final storage.UploadTask uploadTask = storageReference.putFile(File(path));
+    final storage.TaskSnapshot downloadUrl =
+        (await uploadTask.whenComplete(() => null));
+    final String url = (await downloadUrl.ref.getDownloadURL());
+    return url;
+  }
+  
 
   Future<bool> getUser() async {
     bool exist = false;

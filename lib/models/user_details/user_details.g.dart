@@ -8,7 +8,7 @@ part of 'user_details.dart';
 
 UserDetails _$UserDetailsFromJson(Map json) => UserDetails(
       uid: json['uid'] as String?,
-      name: json['name'] as String?,
+      userName: json['userName'] as String?,
       email: json['email'] as String?,
       imageUrl: json['imageUrl'] as String?,
       lat: (json['lat'] as num?)?.toDouble(),
@@ -21,16 +21,17 @@ UserDetails _$UserDetailsFromJson(Map json) => UserDetails(
       fcmToken: json['fcmToken'] as String?,
       noOfCurrentMatches: json['noOfCurrentMatches'] as int? ?? 0,
       phoneNumber: json['phoneNumber'] as String?,
-      inContact: json['inContact'] as bool? ?? false,
+      countryCode: json['countryCode'] as String?,
       long: (json['long'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'name': instance.name,
+      'userName': instance.userName,
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
+      'countryCode': instance.countryCode,
       'noOfCurrentMatches': instance.noOfCurrentMatches,
       'imageUrl': instance.imageUrl,
       'fcmToken': instance.fcmToken,
@@ -38,5 +39,4 @@ Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
       'long': instance.long,
       'currentMatches': instance.currentMatches,
       'currentDeck': instance.currentDeck,
-      'inContact': instance.inContact,
     };
