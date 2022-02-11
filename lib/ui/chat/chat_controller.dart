@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:xchange/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
+import 'package:xchange/services/call_service.dart';
+import 'package:xchange/ui/chat/call/call_view.dart';
 import 'package:xchange/ui/chat/view_image.dart';
 
 class ChatController extends GetxController {
@@ -20,6 +22,8 @@ class ChatController extends GetxController {
   final UserDetails _currentChat = _accountController.currentChat;
   UserDetails get currentChat => _currentChat;
   final resp = ''.obs;
+  final CallService _callService = CallService();
+  Rx<int?> remoteUid = 0.obs;
   @override
   void onInit() {
     getMatchDetails();
@@ -30,12 +34,13 @@ class ChatController extends GetxController {
   getMatchDetails() async {
     if (currentChat.currentDeck != null) {
       final match = currentChat.currentDeck!
-          .where((element) => currentUser.currentDeck!.contains(element)).toList();
-       if(match.isNotEmpty){
-      final details = await _firestoreService.deckcollection.doc(match.first).get();
-      matchDetails.value = MatchDetails.fromJson(details.data()!);
-
-       }
+          .where((element) => currentUser.currentDeck!.contains(element))
+          .toList();
+      if (match.isNotEmpty) {
+        final details =
+            await _firestoreService.deckcollection.doc(match.first).get();
+        matchDetails.value = MatchDetails.fromJson(details.data()!);
+      }
     }
   }
 
@@ -68,7 +73,8 @@ class ChatController extends GetxController {
           time: DateTime.now().toString());
       messages.add(temp);
       chat.clear();
-     matchDetails.value = await _firestoreService.sendMessage(text, matchDetails.value, currentChat,
+      matchDetails.value = await _firestoreService.sendMessage(
+          text, matchDetails.value, currentChat,
           hasImage: url != null, imagePath: url);
     }
   }
@@ -107,6 +113,20 @@ class ChatController extends GetxController {
     }
   }
 
+  void goBack() => Get.back();
+
+  startVideoCall() {
+    Get.to( CallView());
+    _callService.makeVideoCall(currentChat, currentUser, clearRemoteUid: () {
+      remoteUid.value = null;
+    }, setRemoteUid: (int remoteId) {
+      remoteUid.value = uid;
+    });
+  }
+  endCall() {
+    _callService.endCall();
+  }
+
   navigateToViewImage(Message element) {
     Get.to(
         () => ViewImage(
@@ -129,7 +149,6 @@ class ChatController extends GetxController {
     currentImage.value = image;
   }
 
-  void goBack() => Get.back();
   Future<void> blockUser() async {
     showLoadingDialogWithText(msg: 'Blocking ${currentChat.userName}');
     await FirestoreService()

@@ -55,7 +55,7 @@ class ChatView extends GetView<ChatController> {
               actions: [
                 IconButton(
                   onPressed: () {
-                    Get.to(JoinChannelVideo());
+                    controller.startVideoCall();
                   },
                   icon: const Icon(
                     Icons.video_call_rounded,

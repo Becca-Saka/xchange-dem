@@ -7,6 +7,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:xchange/barrel.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:xchange/ui/chat/call/call_view.dart';
+import 'package:xchange/ui/chat/call/sample_cont.dart';
 
 const bool USE_EMULATOR = false;
 
@@ -56,9 +58,9 @@ class MyApp extends StatelessWidget {
       //         return child!;
       //       });
       // },
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
-      // home: UserInfoView(),
+      // initialRoute: AppPages.initial,
+      // getPages: AppPages.routes,
+      home: CallView(),
     );
   }
 }
