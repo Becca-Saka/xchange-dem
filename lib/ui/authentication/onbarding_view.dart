@@ -35,7 +35,7 @@ class OnboardingView extends GetView<AuthenticationController> {
                               fontSize: 20, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 5),
                       const Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.',
+                          'Connect easily with your family and friends over countries',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.w100)),

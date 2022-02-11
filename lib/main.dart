@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xffFF5757),
         colorScheme: ColorScheme.light(primary: appColor),
-        fontFamily: 'Poppins',
+        fontFamily: 'Mulish',
       ),
       // useInheritedMediaQuery: true, // Set to true
       // locale: DevicePreview.locale(context), //
@@ -56,11 +56,10 @@ class MyApp extends StatelessWidget {
       //       dismissOfflineBanner: false,
       //       builder: (BuildContext context, bool isOnline) {
       //         return child!;
-      //       });
+      //       });h
       // },
-      // initialRoute: AppPages.initial,
-      // getPages: AppPages.routes,
-      home: CallView(),
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
     );
   }
 }
