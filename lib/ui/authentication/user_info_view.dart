@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:xchange/barrel.dart';
-import 'package:xchange/controllers/authentication_controller.dart';
 
 class UserInfoView extends GetView<AuthenticationController> {
   const UserInfoView({Key? key}) : super(key: key);
@@ -9,21 +7,22 @@ class UserInfoView extends GetView<AuthenticationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Obx(() => Column(
-                      children: [
-                        const Text('Set up your profile',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 20),
-                        InkWell(
-                          onTap: controller.pickImage,
-                          child: Stack(
-                            alignment: Alignment.bottomRight,
-                            children: [
-                              Obx(() => CircleAvatar(
-                                  backgroundColor: appColor,
+        body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Obx(
+          () => Column(
+            children: [
+              const Text('Set up your profile',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: controller.pickImage,
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Obx(() => CircleAvatar(
+                        backgroundColor: appColor,
                         radius: 60,
                         backgroundImage: controller.path.value != ''
                             ? FileImage(

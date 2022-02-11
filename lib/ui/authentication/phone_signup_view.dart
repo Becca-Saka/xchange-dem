@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:xchange/barrel.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:xchange/controllers/authentication_controller.dart';
 
 class PhoneSignUp extends GetView<AuthenticationController> {
   const PhoneSignUp({Key? key}) : super(key: key);
@@ -53,9 +50,10 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                             child: Column(
                               children: [
                                 IntlPhoneField(
-                                  // controller: controller.phoneController,
                                   disableLengthCheck: true,
                                   showDropdownIcon: false,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
                                   flagsButtonPadding:
                                       const EdgeInsets.symmetric(horizontal: 5),
                                   decoration: const InputDecoration(
@@ -63,12 +61,13 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                       borderSide: BorderSide(),
                                     ),
                                   ),
-                                  initialCountryCode: 'NG',
+                                  initialCountryCode: controller.countryCode,
                                   onChanged: (phone) {
                                     controller.enablePhoneButton();
-                                    controller.phoneNumber = phone.number;
-                                    controller.countryCode = phone.countryCode;
-                                    log('${controller.countryCode} gg ${controller.phoneNumber}, ${phone.completeNumber} ${phone.toString()}');
+                                    controller.phoneNumber =
+                                        phone.completeNumber;
+                                    controller.countryCode =
+                                        phone.countryISOCode;
                                   },
                                 ),
                                 const SizedBox(height: 25),

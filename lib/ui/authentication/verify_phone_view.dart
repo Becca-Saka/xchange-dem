@@ -1,7 +1,6 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:xchange/barrel.dart';
-import 'package:xchange/controllers/authentication_controller.dart';
 
 class VerifyPhoneView extends GetView<AuthenticationController> {
   const VerifyPhoneView({Key? key}) : super(key: key);
@@ -84,13 +83,6 @@ class VerifyPhoneView extends GetView<AuthenticationController> {
                                     },
                                     onChanged: (value) {
                                       controller.enablePhoneVerifyButton();
-                                      log('onChanged: $value');
-                                    },
-                                    beforeTextPaste: (text) {
-                                      print("Allowing to paste $text");
-                                      //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                      //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                      return true;
                                     },
                                     appContext: context,
                                   ),
@@ -99,8 +91,8 @@ class VerifyPhoneView extends GetView<AuthenticationController> {
                                   authButtons(
                                     'Continue',
                                     onTap: controller.verifyOTP,
-                                    isButtonEnabled:
-                                        controller.isPhoneVerifyButtonEnable.value,
+                                    isButtonEnabled: controller
+                                        .isPhoneVerifyButtonEnable.value,
                                   ),
                                 ],
                               ),

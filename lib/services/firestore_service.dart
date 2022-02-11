@@ -14,6 +14,7 @@ class FirestoreService {
   Future<void> removeMatch(
       UserDetails removeUser, MatchDetails matchDetails) async {
     //TODO remove match from user
+    
     // final AuthController _controller = Get.find();
     // final currentUser = _controller.currentUser.value;
     // removeUser.currentMatches!.remove(currentUser.uid!);
@@ -36,26 +37,28 @@ class FirestoreService {
   }
 
   Future updateIsNew(MatchDetails matchDetails) async {
-    final AuthController _controller = Get.find();
-    matchDetails.isNew![_controller.currentUser.value.uid!] = false;
-    await deckcollection.doc(matchDetails.uid).update({
-      'isNew': matchDetails.isNew,
-    });
+    // final AuthController _controller = Get.find();
+    // matchDetails.isNew![_controller.currentUser.value.uid!] = false;
+    // await deckcollection.doc(matchDetails.uid).update({
+    //   'isNew': matchDetails.isNew,
+    // });
   }
 
   Future<List<MatchDetails>> getCurrentlyMatchedUser() async {
-    final AuthController _controller = Get.find();
+    // final AuthController _controller = Get.find();
     return await deckcollection
-        .where('uid', whereIn: _controller.currentUser.value.currentDeck)
+        .where('uid', whereIn: ['_controller.currentUser.value.currentDeck'])
         .get()
         .then((value) =>
             value.docs.map((e) => MatchDetails.fromJson(e.data())).toList());
   }
 
   Stream<List<MatchDetails>> getCurrentlyMatchedUserStream() {
-    final AuthController _controller = Get.find();
-    final currentDeck = _controller.currentUser.value.currentDeck ??
-        AppRepo.currentUser.currentDeck;
+    // final AuthController _controller = Get.find();
+    final currentDeck = ['_controller.currentUser.value.currentDeck' ]
+    // ??
+    //     AppRepo.currentUser.currentDeck
+        ;
     return deckcollection
         .where('uid', whereIn: currentDeck)
         .snapshots()
@@ -71,7 +74,7 @@ class FirestoreService {
                     .toList(),
                 recentMessageTime: json['recentMessageTime'],
                 unReadMessagesList:
-                    (json['${_controller.currentUser.value.uid}Unread']
+                    (json['{_controller.currentUser.value.uid}Unread']
                             as List<dynamic>?)
                         ?.map((e) => e as String)
                         .toList(),
@@ -82,9 +85,11 @@ class FirestoreService {
   }
 
   Stream<List<UserDetails>> getUsersDetail() {
-    final AuthController _controller = Get.find();
-    final currentMatches = _controller.currentUser.value.currentMatches ??
-        AppRepo.currentUser.currentMatches;
+    // final AuthController _controller = Get.find();
+    final currentMatches = ['_controller.currentUser.value.currentMatches'] 
+    // ??
+    //     AppRepo.currentUser.currentMatches
+        ;
     return usercollection.where('uid', whereIn: currentMatches).snapshots().map(
         (event) =>
             event.docs.map((e) => UserDetails.fromJson(e.data())).toList());
@@ -111,11 +116,11 @@ class FirestoreService {
   }
 
   Future<void> updateReadMessage(String uid) async {
-    final AuthController _controller = Get.find();
-    final currentUser = _controller.currentUser.value;
+    // final AuthController _controller = Get.find();
+    // final currentUser = _controller.currentUser.value;
     await deckcollection.doc(uid).update(
       {
-        '${currentUser.uid}Unread': [],
+        '{currentUser.uid}Unread': [],
         'isRead': true,
         'unReadCount': 0,
       },

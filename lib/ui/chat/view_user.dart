@@ -24,7 +24,7 @@ class ViewUser extends GetView {
           ),
         ),
         title: Text(
-          '${controller.currentChat.name}',
+          '${controller.currentChat.userName}',
           style: TextStyle(
               color: Colors.black,
               fontSize: isSmall

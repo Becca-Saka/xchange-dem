@@ -19,11 +19,11 @@ class AuthenticationController extends GetxController {
   RxBool isRecoverButtonEnable = false.obs;
   late UserCredential currentUserCredentials;
   String? phoneNumber, otp, verificationId;
-  String countryCode='+234';
+  String countryCode = 'NG';
   RxString path = ''.obs;
   bool isSignUp = false;
   final ContactService _contactService = ContactService();
-  
+
   navigateToPhonePage(bool signUp) {
     isSignUp = signUp;
     Get.toNamed(Routes.authentication);
@@ -100,7 +100,7 @@ class AuthenticationController extends GetxController {
   Future<void> signUpUser() async {
     if (isProfileButtonEnable.value) {
       await _authenticationService.saveUser(
-          nameController.text, currentUserCredentials, path.value);
+          nameController.text, currentUserCredentials, path.value, countryCode);
 
       Get.offAllNamed(Routes.home);
     }
@@ -123,5 +123,4 @@ class AuthenticationController extends GetxController {
       errorSnackbar(msg: 'Account does not exist, please sign up');
     }
   }
-
 }

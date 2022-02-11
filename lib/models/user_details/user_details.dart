@@ -7,7 +7,9 @@ part 'user_details.g.dart';
 )
 class UserDetails {
   String? uid;
-  String? name;
+  String? userName;
+  @JsonKey(ignore: true)
+  String? nameInContact;
   String? email, phoneNumber, countryCode;
   int noOfCurrentMatches;
   String? imageUrl, fcmToken;
@@ -19,7 +21,8 @@ class UserDetails {
 
   UserDetails(
       {this.uid,
-      this.name,
+      this.userName,
+      this.nameInContact,
       this.email,
       this.imageUrl,
       this.lat,
@@ -39,6 +42,6 @@ class UserDetails {
 
   @override
   String toString() {
-    return 'uid: $uid, name: $name, lat: $lat, long: $long, currentmatches: $currentMatches';
+    return 'uid: $uid, name: $userName, lat: $lat, long: $long, currentmatches: $currentMatches';
   }
 }
