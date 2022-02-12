@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import 'package:xchange/barrel.dart';
+import 'package:xchange/shared/const_dialogs.dart';
 
 class AuthenticationController extends GetxController {
   Rx<UserDetails> userDetails = Rx<UserDetails>(UserDetails());
@@ -10,7 +14,6 @@ class AuthenticationController extends GetxController {
   TextEditingController phoneController = TextEditingController();
   TextEditingController pinController = TextEditingController();
   PageController pageController = PageController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   RxBool isPhoneButtonEnable = false.obs;
   RxBool isPhoneVerifyButtonEnable = false.obs;
   RxBool isProfileButtonEnable = false.obs;
@@ -18,17 +21,49 @@ class AuthenticationController extends GetxController {
   RxBool isRecoverButtonEnable = false.obs;
   RxBool loadWithAnimation = false.obs;
   late UserCredential currentUserCredentials;
-  String? phoneNumber, otp, verificationId;
+  String? phoneNumber, numberWithoutCode;
+  String? otp, verificationId;
   String countryCode = 'NG';
   int? resendToken;
   RxString path = ''.obs;
-  bool isSignUp = false;
   final ContactService _contactService = ContactService();
   RxInt timeTillResendToken = 60.obs;
   Timer? _timer;
-  navigateToPhonePage(bool signUp) {
-    isSignUp = signUp;
+  // Rx<CountryWithPhoneCode> countryPhoneCode = const CountryWithPhoneCode.us().obs;
+  @override
+  onInit() {
+    getUserFromLocalStorage();
+    super.onInit();
+  }
+
+  getUserFromLocalStorage() {
+    if (LocalStorage.userDetail.val.isNotEmpty) {
+      final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
+      userDetails.value = UserDetails.fromJson(userFromStorage);
+      nameController.text = userDetails.value.userName!;
+    }
+  }
+
+  navigateToAuthenticationPage() async {
+    await _contactService.getContactPermission();
     Get.toNamed(Routes.authentication);
+  }
+
+  checkNumber() async {
+    if (numberWithoutCode != null && isPhoneButtonEnable.value) {
+      FormatPhoneResult? formatPhoneResult = await _contactService
+          .getFormattedNumber(countryCode, numberWithoutCode!);
+      if (formatPhoneResult != null) {
+        ConstDialogs.showNumberVerificationDialog(
+            number: formatPhoneResult.formattedNumber,
+            title: 'A verification code will be sent to: ',
+            onPressed: verifyPhoneNUmber);
+      } else {
+        ConstDialogs.showNumberVerificationDialog(
+            number: '$phoneNumber', title: 'Invalid number');
+        log('invalid number');
+      }
+    }
   }
 
   enablePhoneButton() {
@@ -48,22 +83,23 @@ class AuthenticationController extends GetxController {
   }
 
   Future<void> verifyPhoneNUmber() async {
-    if (isPhoneButtonEnable.value) {
-      loadWithAnimation.value = true;
-      await _authenticationService.verifyPhoneNumber(phoneNumber!,
-          onCodeSent: (String id, {int? token}) {
-        verificationId = id;
-        resendToken = token;
-        loadWithAnimation.value = false;
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    // checkNumber();
+    log('verifyPhoneNUmber');
 
-        timeTillResendToken.value = 60;
-        startResendTokenTimer();
-      }, onError: () {
-        loadWithAnimation.value = false;
-      });
-    }
+    loadWithAnimation.value = true;
+    await _authenticationService.verifyPhoneNumber(phoneNumber!,
+        onCodeSent: (String id, {int? token}) {
+      verificationId = id;
+      resendToken = token;
+      loadWithAnimation.value = false;
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+
+      timeTillResendToken.value = 60;
+      startResendTokenTimer();
+    }, onError: () {
+      loadWithAnimation.value = false;
+    });
   }
 
   Future<void> resendVerifyPhoneNUmber() async {
@@ -126,12 +162,16 @@ class AuthenticationController extends GetxController {
       loadWithAnimation.value = false;
       if (currentUser.user != null) {
         currentUserCredentials = currentUser;
-        if (isSignUp) {
-          pageController.nextPage(
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        } else {
-          logInUser();
+        final userExist = await _authenticationService.getUser();
+        if (userExist) {
+          final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
+          final user =
+              UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
+          nameController.text = user.userName!;
         }
+
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300), curve: Curves.ease);
       }
     }
   }

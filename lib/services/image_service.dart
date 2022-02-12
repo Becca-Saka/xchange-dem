@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:xchange/barrel.dart';
+export 'package:image_cropper/image_cropper.dart';
 
 class ImageService extends StatelessWidget {
   final bool isSignUp;

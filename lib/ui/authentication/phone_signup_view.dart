@@ -1,4 +1,8 @@
-import 'package:coolicons/coolicons.dart';
+import 'dart:developer';
+
+import 'package:flutter/services.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:xchange/barrel.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -38,9 +42,9 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                 width: isSmall ? 60 : 120,
                                 fit: BoxFit.contain))),
                     SizedBox(height: isSmall ? 35 : 60),
-                    Text(controller.isSignUp ? 'Registration' : 'Login',
+                    const Text('Enter Your Phone Number',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 5),
                     const Text(
@@ -72,17 +76,26 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                     borderSide: BorderSide(),
                                   ),
                                 ),
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(18)
+                                ],
                                 initialCountryCode: controller.countryCode,
                                 onChanged: (phone) {
+                                  // log('phone $phone');
                                   controller.enablePhoneButton();
                                   controller.phoneNumber = phone.completeNumber;
                                   controller.countryCode = phone.countryISOCode;
+                                  controller.numberWithoutCode = phone.number;
                                 },
-                                onSubmitted: (val)=> controller.verifyPhoneNUmber(),
+                                onCountryChanged: (Country country) {
+                                  controller.countryCode = country.code;
+                                },
+                                onSubmitted: (val) =>
+                                    controller.checkNumber(),
                               ),
                               const SizedBox(height: 40),
                               authButtons('Continue',
-                                  onTap: controller.verifyPhoneNUmber,
+                                  onTap: controller.checkNumber,
                                   isButtonEnabled:
                                       controller.isPhoneButtonEnable.value,
                                   loadAnimation:

@@ -113,22 +113,27 @@ Widget authButtons(
   bool loadAnimation = false,
 }) {
   return AnimatedSwitcher(
-    duration: const Duration(milliseconds: 500),
+    duration: const Duration(milliseconds: 200),
     transitionBuilder: (Widget child, Animation<double> animation) {
-      return ScaleTransition(
-        child: child,
-        scale: animation,
+      return SizeTransition(
+        child: child, sizeFactor: animation,
+        axis: Axis.horizontal,
       );
     },
     child: loadAnimation
         ? Container(
+            height: height,
+            width: height,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30), color: appColor),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+            child: Transform.scale(
+              scale: height * 0.015,
               child: CircularProgressIndicator(
-                  backgroundColor: appColor,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white)),
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  color: Colors.orange,
+                  strokeWidth: 10,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Colors.white)),
             ),
           )
         : SizedBox(
