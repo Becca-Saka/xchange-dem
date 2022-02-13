@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:xchange/app/middlewares/authentication_middleware.dart';
 import 'package:xchange/barrel.dart';
 import 'package:xchange/bindings/account_binding.dart';
 import 'package:xchange/bindings/authentication_binding.dart';
@@ -11,7 +12,6 @@ import 'package:xchange/ui/authentication/verify_phone_view.dart';
 import 'package:xchange/ui/chat/chat_view.dart';
 import 'package:xchange/ui/chat/view_user.dart';
 import 'package:xchange/ui/home/home_view.dart';
-import 'package:xchange/ui/authentication/startup.dart';
 
 part 'app_routes.dart';
 
@@ -21,12 +21,11 @@ class AppPages {
   static final routes = [
     GetPage(
       name: Routes.root,
-      page: () => const StartUp(),
-    ),
-    GetPage(
-      name: Routes.onboarding,
       page: () => const OnboardingView(),
       binding: AuthenticationBinding(),
+      middlewares: [
+        AuthMiddleware(),
+      ],
     ),
     
     GetPage(

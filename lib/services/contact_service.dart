@@ -8,6 +8,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:xchange/barrel.dart';
 
 class ContactService {
+  final FlutterLibphonenumber _flutterLibphonenumber = FlutterLibphonenumber();
   List<Contact>? userContacts;
   List<Map<String, dynamic>> mappedUserContacts = [];
   //get user contact
@@ -37,16 +38,36 @@ class ContactService {
     }
   }
 
-  Future<Map<String, dynamic>?> getNumberDetails(String number) async {
+  Future<FormatPhoneResult?> getFormattedNumber(
+      String countryCode, String phoneNumber) async {
+    final countries = await _flutterLibphonenumber.getAllSupportedRegions();
+
+    CountryWithPhoneCode countryWithPhoneCode =
+        CountryWithPhoneCode.getCountryDataByPhone('+2348123456789')!;
+    final ff = countries.values
+        .where((element) => element.countryCode == countryCode)
+        .toList();
+    if (ff.isNotEmpty) {
+      countryWithPhoneCode = ff.first;
+    }
+    return await _flutterLibphonenumber.getFormattedParseResult(
+      phoneNumber,
+      countryWithPhoneCode,
+    );
+  }
+
+  Future<Map<String, dynamic>?> getNumberDetails(String number,
+      {String? region}) async {
     var result;
     try {
-      await FlutterLibphonenumber().init();
+      await _flutterLibphonenumber.init();
       if (number.startsWith('+')) {
-        result = await FlutterLibphonenumber().parse(
+        result = await _flutterLibphonenumber.parse(
           number,
         );
       } else {
-        result = await FlutterLibphonenumber().parse(number, region: 'NG');
+        result =
+            await _flutterLibphonenumber.parse(number, region: region ?? 'NG');
       }
       // JsonEncoder encoder = const JsonEncoder.withIndent('  ');
 

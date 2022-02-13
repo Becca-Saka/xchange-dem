@@ -12,15 +12,16 @@ import 'package:xchange/ui/chat/call/sample_cont.dart';
 
 const bool USE_EMULATOR = false;
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  log(" message Handling a background message: ${message.messageId}");
-}
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   log(" message Handling a background message: ${message.messageId}");
+// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init('userProfile');
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await AuthenticationService.to.checkLogin();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   if (USE_EMULATOR) {
     runApp(
@@ -72,8 +73,11 @@ class MyAppLarge extends StatelessWidget {
     return GetMaterialApp(
       title: 'The Deck',
       theme: ThemeData(
-        primaryColor: Color(0xffFF5757),
+        primaryColor: appColor,
         colorScheme: ColorScheme.light(primary: appColor),
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
         fontFamily: 'Poppins',
       ),
       useInheritedMediaQuery: true, // Set to true

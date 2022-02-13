@@ -110,24 +110,51 @@ Widget authButtons(
   double height = 60.0,
   double fontSize = 17.0,
   bool isButtonEnabled = false,
+  bool loadAnimation = false,
 }) {
-  return SizedBox(
-    width: double.infinity,
-    height: height,
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          primary: appColor,
-          onSurface: appColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-      onPressed: isButtonEnabled ? onTap : null,
-      child: Text(text,
-          style: TextStyle(
-              letterSpacing: 1.2,
-              color: Colors.white,
-              fontFamily: 'League Spartan',
-              fontSize: fontSize)),
-    ),
+  return AnimatedSwitcher(
+    duration: const Duration(milliseconds: 200),
+    transitionBuilder: (Widget child, Animation<double> animation) {
+      return SizeTransition(
+        child: child,
+        sizeFactor: animation,
+        axis: Axis.horizontal,
+      );
+    },
+    child: loadAnimation
+        ? Container(
+            height: height,
+            width: height,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30), color: appColor),
+            child: Transform.scale(
+              scale: height * 0.015,
+              child: CircularProgressIndicator(
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  color: Colors.orange,
+                  strokeWidth: 10,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(Colors.white)),
+            ),
+          )
+        : SizedBox(
+            width: double.infinity,
+            height: height,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: appColor,
+                  onSurface: appColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30))),
+              onPressed: isButtonEnabled ? onTap : null,
+              child: Text(text,
+                  style: TextStyle(
+                      letterSpacing: 1.2,
+                      color: Colors.white,
+                      fontFamily: 'League Spartan',
+                      fontSize: fontSize)),
+            ),
+          ),
   );
 }
 

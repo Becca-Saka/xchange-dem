@@ -6,6 +6,7 @@ import 'package:xchange/barrel.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 
 class AuthenticationService {
+  static AuthenticationService get to => Get.put(AuthenticationService());
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -14,37 +15,32 @@ class AuthenticationService {
 //TODO:add loading indicator
 
   Future<void> verifyPhoneNumber(String text,
-      {required Function(String verificationId, int? resendToken)
-          onCodeSent}) async {
+      {required Function(String verificationId, {int? token}) onCodeSent,
+      required Function() onError,
+      int? resendToken}) async {
     try {
       await auth.verifyPhoneNumber(
         phoneNumber: text,
         timeout: const Duration(seconds: 60),
-        verificationCompleted: (AuthCredential credential) {
-          log('verification completed');
-          log('credential: $credential');
-          auth.signInWithCredential(credential).then((UserCredential result) {
-            log('result: $result');
-            Get.offAllNamed(Routes.LOGIN);
-          });
-        },
+        forceResendingToken: resendToken,
+        verificationCompleted: (AuthCredential credential) {},
         verificationFailed: (FirebaseAuthException exception) {
-          log('verification failed');
-          log('exception: $exception');
+          final errorMessage = getMessageFromErrorCode(exception);
+          errorSnackbar(msg: errorMessage);
+          onError();
         },
         codeSent: (String verificationId, int? forceResendingToken) {
-          log('code sent');
-          log('verificationId: $verificationId');
-          log('forceResendingToken: $forceResendingToken');
-          onCodeSent(verificationId, forceResendingToken);
+          onCodeSent(
+            verificationId,
+          );
         },
         codeAutoRetrievalTimeout: (String verificationId) {
-          log('code auto retrieval timeout');
-          log('verificationId: $verificationId');
+          onCodeSent(
+            verificationId,
+          );
         },
       );
     } on FirebaseAuthException catch (e) {
-      log('$e');
       final errorMessage = getMessageFromErrorCode(e);
       errorSnackbar(msg: errorMessage);
     } catch (e) {
@@ -53,7 +49,10 @@ class AuthenticationService {
   }
 
   Future<UserCredential> verifyOTP(
-      String verificationId, String codeSent) async {
+    String verificationId,
+    String codeSent, {
+    required Function() onError,
+  }) async {
     try {
       return await auth.signInWithCredential(PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: codeSent));
@@ -61,9 +60,9 @@ class AuthenticationService {
       log('$e');
       final errorMessage = getMessageFromErrorCode(e);
       errorSnackbar(msg: errorMessage);
+      onError();
       rethrow;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -110,7 +109,7 @@ class AuthenticationService {
     return url;
   }
 
-  Future<bool> getUser() async {
+  Future<bool> getUser({bool authStarted = false}) async {
     bool exist = false;
     try {
       final uid = auth.currentUser!.uid;
@@ -118,6 +117,7 @@ class AuthenticationService {
       if (userDetails.exists) {
         LocalStorage.clearBoxes();
         LocalStorage.userDetail.val = jsonEncode(userDetails.data());
+        LocalStorage.authenticationStarted.val = authStarted;
         log('saved ${LocalStorage.userDetail.val}');
         exist = true;
       } else {
@@ -132,27 +132,34 @@ class AuthenticationService {
   Future<bool> checkLogin() async {
     bool isLoggedIn = false;
     try {
-      await auth.currentUser!.reload();
+      // await auth.currentUser!.reload();
+      log('checking login');
       User? user = auth.currentUser;
       if (user != null) {
-        isLoggedIn = true;
-        await getUser();
-        log('user is logged in');
+        IdTokenResult tokenResult = await user.getIdTokenResult(true);
+        if (tokenResult.token != null) {
+          log('token: ${tokenResult.token}');
+          isLoggedIn = true;
+          LocalStorage.userLoggedIn.val = true;
+        }
       } else {
         isLoggedIn = false;
+        log('checking login false');
       }
     } catch (e) {
       log(' ERROR $e');
       isLoggedIn = false;
     }
+
+    log('checking login vr $isLoggedIn');
     return isLoggedIn;
   }
 
   Future<void> logout() async {
     try {
       await auth.signOut().whenComplete(() {
-        box.erase();
-        Get.offAllNamed(Routes.onboarding);
+        LocalStorage.clearBoxes();
+        Get.offAllNamed(Routes.root);
       });
     } on FirebaseAuthException catch (e) {
       Get.close(1);

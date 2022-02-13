@@ -14,11 +14,10 @@ class AuthenticationView extends GetView<AuthenticationController> {
       body: SafeArea(
         child: PageView(
           controller: controller.pageController,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
+          physics: const NeverScrollableScrollPhysics(),
+          children: const [
             PhoneSignUp(),
             VerifyPhoneView(),
-            ContactView(),
             UserInfoView(),
 
           ],
