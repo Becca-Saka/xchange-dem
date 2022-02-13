@@ -28,6 +28,8 @@ class AuthenticationService {
           final errorMessage = getMessageFromErrorCode(exception);
           errorSnackbar(msg: errorMessage);
           onError();
+
+          log('Error ${exception}');
         },
         codeSent: (String verificationId, int? forceResendingToken) {
           onCodeSent(
@@ -43,6 +45,7 @@ class AuthenticationService {
     } on FirebaseAuthException catch (e) {
       final errorMessage = getMessageFromErrorCode(e);
       errorSnackbar(msg: errorMessage);
+      log('Error ${e}');
     } catch (e) {
       print(e);
     }
@@ -202,7 +205,6 @@ String getMessageFromErrorCode(FirebaseAuthException e) {
       msg = "Too many requests to log into this account.";
       break;
     case "ERROR_OPERATION_NOT_ALLOWED":
-    case "operation-not-allowed":
       msg = "Server error, please try again later.";
       break;
     case "ERROR_INVALID_EMAIL":
@@ -210,7 +212,7 @@ String getMessageFromErrorCode(FirebaseAuthException e) {
       msg = "Email address is invalid.";
       break;
     default:
-      msg = "Login failed. Please try again.";
+      msg = "Something went wrong. Please try again.";
       break;
   }
   return msg;

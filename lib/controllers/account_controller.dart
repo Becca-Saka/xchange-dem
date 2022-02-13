@@ -10,6 +10,7 @@ class AccountController extends GetxController {
   UserDetails currentChat = UserDetails();
   final ContactService _contactService = ContactService();
   final FirestoreService _firestoreService = FirestoreService();
+  RxInt currentIndex = 0.obs;
   @override
   void onInit() {
     final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
@@ -54,5 +55,9 @@ class AccountController extends GetxController {
     } else {
       return phoneNumber;
     }
+  }
+
+  onIndexChanged(int index) {
+    currentIndex.value = index;
   }
 }

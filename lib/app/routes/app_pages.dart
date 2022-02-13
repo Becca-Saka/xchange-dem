@@ -11,7 +11,8 @@ import 'package:xchange/ui/authentication/user_info_view.dart';
 import 'package:xchange/ui/authentication/verify_phone_view.dart';
 import 'package:xchange/ui/chat/chat_view.dart';
 import 'package:xchange/ui/chat/view_user.dart';
-import 'package:xchange/ui/home/home_view.dart';
+import 'package:xchange/ui/home/main_view.dart';
+// import 'package:xchange/ui/home/home_view.dart';
 
 part 'app_routes.dart';
 
@@ -27,7 +28,6 @@ class AppPages {
         AuthMiddleware(),
       ],
     ),
-    
     GetPage(
       name: Routes.authentication,
       page: () => const AuthenticationView(),

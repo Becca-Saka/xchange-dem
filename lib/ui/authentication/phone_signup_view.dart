@@ -66,7 +66,11 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                               IntlPhoneField(
                                 disableLengthCheck: true,
                                 showDropdownIcon: false,
-                                initialValue: controller.phoneNumber,
+                                initialValue:
+                                    controller.formatPhoneResult != null
+                                        ? controller
+                                            .formatPhoneResult!.formattedNumber
+                                        : null,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 flagsButtonPadding:

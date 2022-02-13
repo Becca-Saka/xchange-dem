@@ -30,9 +30,7 @@ class ImageService extends StatelessWidget {
                       child: Text(
                         'Take photo',
                         style: TextStyle(
-                            height: 1.5,
-                            fontFamily: 'Poppins',
-                            fontSize: 17),
+                            height: 1.5, fontFamily: 'Poppins', fontSize: 17),
                       ),
                     ),
                   ),
@@ -50,9 +48,7 @@ class ImageService extends StatelessWidget {
                       child: Text(
                         'Choose from Gallery',
                         style: TextStyle(
-                            height: 1.5,
-                            fontFamily: 'Poppins',
-                            fontSize: 17),
+                            height: 1.5, fontFamily: 'Poppins', fontSize: 17),
                       ),
                     ),
                   ),
