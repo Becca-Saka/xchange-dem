@@ -86,10 +86,9 @@ class VerifyPhoneView extends GetView<AuthenticationController> {
                                     },
                                     appContext: context,
                                   ),
-                                  const SizedBox(height: 25),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 40),
                                   authButtons(
-                                    'Continue',
+                                    'Resend Code',
                                     onTap: controller.verifyOTP,
                                     isButtonEnabled: controller
                                         .isPhoneVerifyButtonEnable.value,

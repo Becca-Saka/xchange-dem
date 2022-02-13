@@ -14,7 +14,8 @@ class AuthenticationService {
 //TODO:add loading indicator
 
   Future<void> verifyPhoneNumber(String text,
-      {required Function(String verificationId) onCodeSent}) async {
+      {required Function(String verificationId, int? resendToken)
+          onCodeSent}) async {
     try {
       await auth.verifyPhoneNumber(
         phoneNumber: text,
@@ -35,7 +36,7 @@ class AuthenticationService {
           log('code sent');
           log('verificationId: $verificationId');
           log('forceResendingToken: $forceResendingToken');
-          onCodeSent(verificationId);
+          onCodeSent(verificationId, forceResendingToken);
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           log('code auto retrieval timeout');

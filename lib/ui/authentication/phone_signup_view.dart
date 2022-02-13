@@ -9,7 +9,7 @@ class PhoneSignUp extends GetView<AuthenticationController> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(18.0),
           child: LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
                 child: ConstrainedBox(
@@ -33,14 +33,17 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                       const SizedBox(height: 60),
                       Text(controller.isSignUp ? 'Registration' : 'Login',
                           style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                              fontSize: 20, fontWeight: FontWeight.w700)),
                       const SizedBox(height: 5),
-                      const Text('Enter your phone number to continue',
+                      const Text(
+                          'Please confirm your country code and enter your phone number',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w100)),
+                              fontSize: 14, fontWeight: FontWeight.w400)),
                       const SizedBox(height: 20),
                       Padding(
-                        padding: const EdgeInsets.all(18.0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 18, horizontal: 16),
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
@@ -55,7 +58,8 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   flagsButtonPadding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
+                                      const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderSide: BorderSide(),
@@ -70,8 +74,7 @@ class PhoneSignUp extends GetView<AuthenticationController> {
                                         phone.countryISOCode;
                                   },
                                 ),
-                                const SizedBox(height: 25),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 40),
                                 authButtons(
                                   'Continue',
                                   onTap: controller.verifyPhoneNUmber,

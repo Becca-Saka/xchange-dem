@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:xchange/barrel.dart';
-import 'package:xchange/services/contact_service.dart';
 
 class AuthenticationController extends GetxController {
   Rx<UserDetails> userDetails = Rx<UserDetails>(UserDetails());
@@ -16,6 +15,7 @@ class AuthenticationController extends GetxController {
   RxBool isPhoneVerifyButtonEnable = false.obs;
   RxBool isProfileButtonEnable = false.obs;
   RxBool isButtonEnable = false.obs;
+
   RxBool isRecoverButtonEnable = false.obs;
   late UserCredential currentUserCredentials;
   String? phoneNumber, otp, verificationId;
@@ -23,6 +23,7 @@ class AuthenticationController extends GetxController {
   RxString path = ''.obs;
   bool isSignUp = false;
   final ContactService _contactService = ContactService();
+  int? resendToken;
 
   navigateToPhonePage(bool signUp) {
     isSignUp = signUp;
@@ -56,8 +57,9 @@ class AuthenticationController extends GetxController {
   Future<void> verifyPhoneNUmber() async {
     if (isPhoneButtonEnable.value) {
       await _authenticationService.verifyPhoneNumber(phoneNumber!,
-          onCodeSent: (String id) {
+          onCodeSent: (String id, int? token) {
         verificationId = id;
+        resendToken = token;
         pageController.nextPage(
             duration: const Duration(milliseconds: 500), curve: Curves.ease);
       });

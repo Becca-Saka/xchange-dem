@@ -116,10 +116,11 @@ Widget authButtons(
     height: height,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: (isButtonEnabled ? appColor : appColor.withOpacity(0.5)),
+          primary: appColor,
+          onSurface: appColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-      onPressed: onTap,
+      onPressed: isButtonEnabled ? onTap : null,
       child: Text(text,
           style: TextStyle(
               letterSpacing: 1.2,
@@ -129,6 +130,7 @@ Widget authButtons(
     ),
   );
 }
+
 //TODO:remove
 Widget appHeader(double deckSize, double peopleSize) {
   return Column(
