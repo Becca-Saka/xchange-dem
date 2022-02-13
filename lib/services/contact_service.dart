@@ -41,9 +41,9 @@ class ContactService {
   Future<FormatPhoneResult?> getFormattedNumber(
       String countryCode, String phoneNumber) async {
     final countries = await _flutterLibphonenumber.getAllSupportedRegions();
-
-    CountryWithPhoneCode countryWithPhoneCode =
-        CountryWithPhoneCode.getCountryDataByPhone('+2348123456789')!;
+    CountryWithPhoneCode? countryWithPhoneCode;
+    // CountryWithPhoneCode countryWithPhoneCode =
+    //     CountryWithPhoneCode.getCountryDataByPhone('+2348123456789')!;
     final ff = countries.values
         .where((element) => element.countryCode == countryCode)
         .toList();
@@ -52,7 +52,7 @@ class ContactService {
     }
     return await _flutterLibphonenumber.getFormattedParseResult(
       phoneNumber,
-      countryWithPhoneCode,
+      countryWithPhoneCode!,
     );
   }
 

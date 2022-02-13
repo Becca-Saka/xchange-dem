@@ -227,3 +227,4 @@ CircleAvatar profileAvatar(String? url, String name) {
     child: url == null ? Text(name.substring(0, 1)) : null,
   );
 }
+

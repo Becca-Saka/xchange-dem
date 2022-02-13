@@ -29,6 +29,7 @@ class AuthenticationController extends GetxController {
   final ContactService _contactService = ContactService();
   RxInt timeTillResendToken = 60.obs;
   Timer? _timer;
+  FormatPhoneResult? formatPhoneResult;
   // Rx<CountryWithPhoneCode> countryPhoneCode = const CountryWithPhoneCode.us().obs;
   @override
   onInit() {
@@ -51,11 +52,11 @@ class AuthenticationController extends GetxController {
 
   checkNumber() async {
     if (numberWithoutCode != null && isPhoneButtonEnable.value) {
-      FormatPhoneResult? formatPhoneResult = await _contactService
-          .getFormattedNumber(countryCode, numberWithoutCode!);
+      formatPhoneResult = await _contactService.getFormattedNumber(
+          countryCode, numberWithoutCode!);
       if (formatPhoneResult != null) {
         ConstDialogs.showNumberVerificationDialog(
-            number: formatPhoneResult.formattedNumber,
+            number: formatPhoneResult!.formattedNumber,
             title: 'A verification code will be sent to: ',
             onPressed: verifyPhoneNUmber);
       } else {
@@ -83,12 +84,11 @@ class AuthenticationController extends GetxController {
   }
 
   Future<void> verifyPhoneNUmber() async {
-    // checkNumber();
-    log('verifyPhoneNUmber');
 
     loadWithAnimation.value = true;
-    await _authenticationService.verifyPhoneNumber(phoneNumber!,
-        onCodeSent: (String id, {int? token}) {
+    await _authenticationService
+        .verifyPhoneNumber(formatPhoneResult!.formattedNumber,
+            onCodeSent: (String id, {int? token}) {
       verificationId = id;
       resendToken = token;
       loadWithAnimation.value = false;
@@ -105,7 +105,7 @@ class AuthenticationController extends GetxController {
   Future<void> resendVerifyPhoneNUmber() async {
     if (isPhoneVerifyButtonEnable.value) {
       loadWithAnimation.value = true;
-      await _authenticationService.verifyPhoneNumber(phoneNumber!,
+      await _authenticationService.verifyPhoneNumber(formatPhoneResult!.formattedNumber,
           onCodeSent: (String id, {int? token}) {
             verificationId = id;
             resendToken = token;
@@ -168,6 +168,9 @@ class AuthenticationController extends GetxController {
           final user =
               UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
           nameController.text = user.userName!;
+          if (nameController.text.isNotEmpty) {
+            isProfileButtonEnable.value = true;
+          }
         }
 
         pageController.nextPage(
