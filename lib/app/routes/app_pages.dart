@@ -11,6 +11,7 @@ import 'package:xchange/ui/authentication/user_info_view.dart';
 import 'package:xchange/ui/authentication/verify_phone_view.dart';
 import 'package:xchange/ui/chat/chat_view.dart';
 import 'package:xchange/ui/chat/view_user.dart';
+import 'package:xchange/ui/home/home_view.dart';
 import 'package:xchange/ui/home/main_view.dart';
 // import 'package:xchange/ui/home/home_view.dart';
 
@@ -47,6 +48,11 @@ class AppPages {
       name: Routes.userInfo,
       page: () => const UserInfoView(),
       binding: AuthenticationBinding(),
+    ),
+    GetPage(
+      name: Routes.main,
+      page: () => MainView(),
+      binding: AccountBinding(),
     ),
     GetPage(
       name: Routes.home,

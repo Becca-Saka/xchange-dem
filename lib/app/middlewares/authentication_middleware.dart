@@ -8,7 +8,7 @@ class AuthMiddleware extends GetMiddleware {
       return const RouteSettings(name: Routes.authentication);
     } else if (LocalStorage.userLoggedIn.val &&
         LocalStorage.authenticationStarted.val == false) {
-      return const RouteSettings(name: Routes.home);
+      return const RouteSettings(name: Routes.main);
     } else {
       return null;
     }

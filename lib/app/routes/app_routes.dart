@@ -23,4 +23,6 @@ abstract class Routes {
   static const userInfo = '/userInfo';
 
   static const authentication = '/authentication';
+
+  static const main ='/main';
 }

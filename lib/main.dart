@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return GetMaterialApp(
-      title: 'The Deck',
+      title: 'Xchange',
       theme: ThemeData(
-        primaryColor: Color(0xffFF5757),
+        primaryColor: appColor,
         colorScheme: ColorScheme.light(primary: appColor),
         fontFamily: 'Mulish',
       ),
