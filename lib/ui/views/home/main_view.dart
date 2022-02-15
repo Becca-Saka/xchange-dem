@@ -12,6 +12,15 @@ class MainView extends GetView<AccountController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: const Text(
+            'UniPing',
+            style: TextStyle(
+                color: Colors.black, fontSize: 24, fontWeight: FontWeight.w600),
+          ),
+        ),
         body: getBody(),
         bottomNavigationBar: _buildBottomBar()));
   }

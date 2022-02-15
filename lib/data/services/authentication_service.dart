@@ -135,26 +135,20 @@ class AuthenticationService {
   Future<bool> checkLogin() async {
     bool isLoggedIn = false;
     try {
-      // await auth.currentUser!.reload();
-      log('checking login');
       User? user = auth.currentUser;
       if (user != null) {
         IdTokenResult tokenResult = await user.getIdTokenResult(true);
         if (tokenResult.token != null) {
-          log('token: ${tokenResult.token}');
           isLoggedIn = true;
           LocalStorage.userLoggedIn.val = true;
         }
       } else {
         isLoggedIn = false;
-        log('checking login false');
       }
     } catch (e) {
       log(' ERROR $e');
       isLoggedIn = false;
     }
-
-    log('checking login vr $isLoggedIn');
     return isLoggedIn;
   }
 

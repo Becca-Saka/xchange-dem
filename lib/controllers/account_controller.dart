@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:xchange/app/barrel.dart';
@@ -12,18 +13,24 @@ class AccountController extends GetxController {
   final ContactService _contactService = ContactService();
   final FirestoreService _firestoreService = FirestoreService();
   RxInt currentIndex = 0.obs;
+  RxString parsedPhoneNumber = ''.obs;
   @override
   void onInit() {
     final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
     userDetails.value =
         UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
+    getFormattedNumber();
     getRegisteredUserContacts();
     super.onInit();
   }
-  //   Future<FormatPhoneResult?> getFormattedNumber() async {
-  //   return await _contactService.getFormattedNumber(
-  //       countryCode, numberWithoutCode!);
-  // }
+
+  Future<void> getFormattedNumber() async {
+    final p =
+        await NumberParser.getNumberDetails(userDetails.value.phoneNumber!);
+    log('Parese Phone Number $p');
+    parsedPhoneNumber.value = p!['international'];
+    log('Parsed Phone Numbersss ${parsedPhoneNumber.value}');
+  }
 
   navigateToChat(UserDetails user) {
     currentChat = user;

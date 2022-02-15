@@ -13,32 +13,15 @@ class HomeView extends GetView<AccountController> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
+        floatingActionButton:  FloatingActionButton(
           backgroundColor: Colors.white,
-          title: const Text(
-            'UniPing',
-            style: TextStyle(
-                color: Colors.black, fontSize: 24, fontWeight: FontWeight.w600),
+          onPressed: () {
+          },
+          child: Icon(
+            Icons.add,
+            color: Colors.black,
           ),
-          actions: [
-            InkWell(
-              onTap: () {},
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 3),
-                child: Icon(Coolicons.message_plus_alt, color: Colors.black),
-              ),
-            ),
-            // InkWell(
-            //   onTap: () {},
-            //   child: const Padding(
-            //     padding: EdgeInsets.symmetric(horizontal: 3),
-            //     child: Icon(Coolicons.more_vertical, color: Colors.black),
-            //   ),
-            // ),
-          ],
-        ),
-        body: Padding(
+        ),body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Obx(
               () => Column(

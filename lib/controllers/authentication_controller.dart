@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:xchange/app/barrel.dart';
-import 'package:xchange/shared/const_dialogs.dart';
+import 'package:xchange/ui/shared/const_dialogs.dart';
 
 class AuthenticationController extends GetxController {
   Rx<UserDetails> userDetails = Rx<UserDetails>(UserDetails());
@@ -52,7 +50,7 @@ class AuthenticationController extends GetxController {
 
   checkNumber() async {
     if (numberWithoutCode != null && isPhoneButtonEnable.value) {
-      formatPhoneResult = await _contactService.getFormattedNumber(
+      formatPhoneResult = await NumberParser.getFormattedNumber(
           countryCode, numberWithoutCode!);
       if (formatPhoneResult != null) {
         ConstDialogs.showNumberVerificationDialog(
