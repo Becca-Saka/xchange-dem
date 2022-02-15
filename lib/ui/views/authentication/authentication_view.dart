@@ -1,10 +1,9 @@
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/authentication_controller.dart';
-import 'package:xchange/ui/authentication/contact_view.dart';
-import 'package:xchange/ui/authentication/phone_signup_view.dart';
-import 'package:xchange/ui/authentication/user_info_view.dart';
-import 'package:xchange/ui/authentication/verify_phone_view.dart';
 
+import 'phone_signup_view.dart';
+import 'user_info_view.dart';
+import 'verify_phone_view.dart';
 class AuthenticationView extends GetView<AuthenticationController> {
   const AuthenticationView({ Key? key }) : super(key: key);
 

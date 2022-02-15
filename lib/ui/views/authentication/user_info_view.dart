@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:coolicons/coolicons.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 class UserInfoView extends GetView<AuthenticationController> {
   const UserInfoView({Key? key}) : super(key: key);

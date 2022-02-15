@@ -1,11 +1,9 @@
 import 'dart:developer';
 
 import 'package:intl/intl.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/services/call_service.dart';
-import 'package:xchange/ui/chat/call/call_view.dart';
-import 'package:xchange/ui/chat/view_image.dart';
 
 class SampleChatController extends GetxController {
   TextEditingController chat = TextEditingController();

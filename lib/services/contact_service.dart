@@ -5,7 +5,7 @@ import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 class ContactService {
   final FlutterLibphonenumber _flutterLibphonenumber = FlutterLibphonenumber();

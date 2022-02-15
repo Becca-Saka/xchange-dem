@@ -1,4 +1,4 @@
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 class AuthMiddleware extends GetMiddleware {
   @override

@@ -1,6 +1,6 @@
 // import 'dart:developer';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 class VerifyPhoneView extends GetView<AuthenticationController> {
   const VerifyPhoneView({Key? key}) : super(key: key);

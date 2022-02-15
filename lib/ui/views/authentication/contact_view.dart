@@ -1,4 +1,4 @@
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 class ContactView extends GetView<AuthenticationController> {
   const ContactView({Key? key}) : super(key: key);

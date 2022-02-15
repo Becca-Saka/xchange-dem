@@ -3,9 +3,8 @@ import 'dart:developer';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
-import 'package:xchange/barrel.dart';
-import 'package:xchange/ui/chat/call/sample_cont.dart';
-import 'package:xchange/ui/chat/chat_controller.dart';
+import 'package:xchange/app/barrel.dart';
+import 'package:xchange/ui/views/chat/call/sample_cont.dart';
 
 class CallView extends StatelessWidget {
    CallView({Key? key}) : super(key: key);

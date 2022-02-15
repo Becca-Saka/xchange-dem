@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:get_storage/get_storage.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 
 class AuthenticationService {

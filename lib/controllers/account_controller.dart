@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:xchange/barrel.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:xchange/app/barrel.dart';
 
 class AccountController extends GetxController {
   final AuthenticationService _authenticationService = AuthenticationService();
@@ -19,6 +20,10 @@ class AccountController extends GetxController {
     getRegisteredUserContacts();
     super.onInit();
   }
+  //   Future<FormatPhoneResult?> getFormattedNumber() async {
+  //   return await _contactService.getFormattedNumber(
+  //       countryCode, numberWithoutCode!);
+  // }
 
   navigateToChat(UserDetails user) {
     currentChat = user;

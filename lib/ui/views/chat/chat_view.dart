@@ -1,9 +1,7 @@
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
-import 'package:xchange/barrel.dart';
-import 'package:xchange/ui/chat/call/call_view.dart';
-import 'package:xchange/ui/chat/chat_controller.dart';
-
+import 'package:xchange/app/barrel.dart';
+import 'package:xchange/controllers/chat_controller.dart';
 class ChatView extends GetView<ChatController> {
   const ChatView({Key? key}) : super(key: key);
 

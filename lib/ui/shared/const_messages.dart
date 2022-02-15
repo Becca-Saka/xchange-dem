@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:xchange/shared/const_color.dart';
+import 'package:xchange/ui/shared/const_color.dart';
 
  errorSnackbar({
   required String msg,

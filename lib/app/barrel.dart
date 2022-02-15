@@ -1,12 +1,12 @@
 export 'package:flutter/material.dart';
 export 'package:get/get.dart';
 export 'package:xchange/shared/const_widget.dart';
-export 'package:xchange/shared/const_color.dart';
-export 'package:xchange/shared/const_size.dart';
+export 'package:xchange/ui/shared/const_color.dart';
+export 'package:xchange/ui/shared/const_size.dart';
 export 'package:xchange/shared/const_widget.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:xchange/services/authentication_service.dart';
-export 'package:xchange/shared/const_messages.dart';
+export 'package:xchange/ui/shared/const_messages.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 export 'dart:async';
 export 'package:xchange/app/routes/app_pages.dart';

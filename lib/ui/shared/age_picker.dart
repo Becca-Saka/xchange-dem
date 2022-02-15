@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 import 'const_string.dart';
 

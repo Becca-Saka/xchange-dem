@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
-import 'package:xchange/shared/custom_navbar.dart';
-import 'package:xchange/ui/home/home_view.dart';
+import 'package:xchange/ui/shared/custom_navbar.dart';
+
+import 'group_chats_view.dart';
+import 'home_view.dart';
+import 'settings_view.dart';
 
 class MainView extends GetView<AccountController> {
   const MainView({Key? key}) : super(key: key);
@@ -53,29 +55,10 @@ class MainView extends GetView<AccountController> {
   Widget getBody() {
     
     List<Widget> pages = [
-      Container(
-        alignment: Alignment.center,
-        child: const Text(
-          "Groups",
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-        ),
-      ),
+    
+      GroupChatsView(),
       HomeView(),
-      Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Settings",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-             TextButton(
-                      onPressed: controller.logout,
-                      child: const Text('Logout')),
-          ],
-        ),
-      ),
+      SettingsView(),
     ];
     return IndexedStack(
       index: controller.currentIndex.value,

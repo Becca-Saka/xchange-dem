@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:intl_phone_field/phone_number.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:xchange/shared/const_dialogs.dart';
 
 class AuthenticationController extends GetxController {
@@ -194,7 +194,7 @@ class AuthenticationController extends GetxController {
       await _authenticationService.saveUser(
           nameController.text, currentUserCredentials, path.value, countryCode);
 
-      Get.offAllNamed(Routes.home);
+      Get.offAllNamed(Routes.main);
     }
   }
 
@@ -210,7 +210,7 @@ class AuthenticationController extends GetxController {
   Future<void> logInUser() async {
     final userExist = await _authenticationService.getUser();
     if (userExist) {
-      Get.offAllNamed(Routes.home);
+      Get.offAllNamed(Routes.main);
     } else {
       errorSnackbar(msg: 'Account does not exist, please sign up');
     }

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 //Defining sizes
 Widget heightOne() {
@@ -222,8 +222,9 @@ Widget backButton({Function()? onTap}) {
   );
 }
 
-CircleAvatar profileAvatar(String? url, String name) {
+CircleAvatar profileAvatar(String? url, String name, {double? radius}) {
   return CircleAvatar(
+    radius: radius,
     backgroundImage: url != null ? NetworkImage(url) : null,
     child: url == null ? Text(name.substring(0, 1)) : null,
   );

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:intl_phone_field/countries.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class PhoneSignUp extends GetView<AuthenticationController> {

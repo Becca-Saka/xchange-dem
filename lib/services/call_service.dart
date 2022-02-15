@@ -6,7 +6,7 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 /// Get your own App ID at https://dashboard.agora.io/
 const String appId = "2c4ce455060c4026a824580799b20435";

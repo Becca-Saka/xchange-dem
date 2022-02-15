@@ -1,5 +1,5 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 
 Future<Position> checkLocationPermmission() async {
   bool serviceEnabled;

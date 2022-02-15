@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:xchange/controllers/account_controller.dart';
 

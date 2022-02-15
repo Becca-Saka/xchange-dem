@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:xchange/barrel.dart';
+import 'package:xchange/app/barrel.dart';
 part 'deck_details.g.dart';
 
 @JsonSerializable(
