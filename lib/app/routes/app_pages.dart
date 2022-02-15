@@ -9,8 +9,8 @@ import 'package:xchange/ui/views/authentication/onbarding_view.dart';
 import 'package:xchange/ui/views/authentication/phone_signup_view.dart';
 import 'package:xchange/ui/views/authentication/user_info_view.dart';
 import 'package:xchange/ui/views/authentication/verify_phone_view.dart';
-import 'package:xchange/ui/views/chat/chat_view.dart';
-import 'package:xchange/ui/views/chat/view_user.dart';
+import 'package:xchange/ui/views/chat/message/message_view.dart';
+import 'package:xchange/ui/views/chat/message/view_user.dart';
 import 'package:xchange/ui/views/home/main_view.dart';
 
 part 'app_routes.dart';
@@ -55,7 +55,7 @@ class AppPages {
    
     GetPage(
       name: Routes.CHAT,
-      page: () => const ChatView(),
+      page: () => const MessageView(),
       binding: ChatBinding(),
     ),
     GetPage(

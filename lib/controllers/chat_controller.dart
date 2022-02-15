@@ -1,11 +1,15 @@
 import 'dart:developer';
 
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
+import 'package:xchange/controllers/call_controller.dart';
+import 'package:xchange/data/models/call_details/call_details.dart';
 import 'package:xchange/data/services/call_service.dart';
-import 'package:xchange/ui/views/chat/view_image.dart';
-import '../ui/views/chat/call/call_view.dart';
+import 'package:xchange/ui/shared/coming_soon.dart';
+import 'package:xchange/ui/views/chat/call/make_call.dart';
+import 'package:xchange/ui/views/chat/message/view_image.dart';
 
 class ChatController extends GetxController {
   TextEditingController chat = TextEditingController();
@@ -27,6 +31,7 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     getMatchDetails();
+    addPostFrameCallback();
     //  matchDetails = Get.arguments['match'];
     super.onInit();
   }
@@ -116,15 +121,41 @@ class ChatController extends GetxController {
   void goBack() => Get.back();
 
   startVideoCall() {
-    Get.to( CallView());
-    _callService.makeVideoCall(currentChat, currentUser, clearRemoteUid: () {
-      remoteUid.value = null;
-    }, setRemoteUid: (int remoteId) {
-      remoteUid.value = uid;
-    });
+    // Get.to(IndexPage());
+    // Get.to( CallView());
+    // _callService.makeVideoCall(currentChat, currentUser, clearRemoteUid: () {
+    //   remoteUid.value = null;
+    // }, setRemoteUid: (int remoteId) {
+    //   remoteUid.value = uid;
+    // });
   }
+
   endCall() {
-    _callService.endCall();
+    // _callService.endCall();
+  }
+
+  dialVideoCall() async {
+    CallDetails callDetails =
+        await _callService.makeCall(currentUser, currentChat);
+    if (callDetails.hasDialled) {
+      Get.put(CallController(callDetails: callDetails));
+      Get.to(
+        const MakeCallScreen(),
+      );
+    }
+  }
+
+  addPostFrameCallback() {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      final uu = _callService.listenForCall(currentUser.uid);
+      uu.listen((call) {
+        if (call.docs.isNotEmpty) {
+          log('You have a call');
+        }
+      });
+
+      //TODO: Listen for call documents'
+    });
   }
 
   navigateToViewImage(Message element) {

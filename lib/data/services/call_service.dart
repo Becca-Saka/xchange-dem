@@ -3,67 +3,99 @@ import 'dart:developer';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:xchange/app/barrel.dart';
-
-/// Get your own App ID at https://dashboard.agora.io/
-const String appId = "2c4ce455060c4026a824580799b20435";
-
-/// Please refer to https://docs.agora.io/en/Agora%20Platform/token
-const String token =
-    "0062c4ce455060c4026a824580799b20435IAA44yMvBkM3j/s1JfoFasVJkjNS3Rj+68Am5W8g4ukBwSBPEZkAAAAAEAAxc9bWqSkHYgEAAQCpKQdi";
-
-/// Your channel ID
-const String channelId = "Xchange Temp";
-
-/// Your int user ID
-const int uid = 0;
-
-/// Your string user ID
-const String stringUid = '0';
+import 'package:xchange/data/models/call_details/call_details.dart';
 
 class CallService {
   late final RtcEngine _engine;
-  bool isJoined = false, switchCamera = true, switchRender = true;
-  int? remoteUid;
-  makeVideoCall(UserDetails userToCall, UserDetails userCalling,
-      {required Function(int remoteId) setRemoteUid,
-      required Function() clearRemoteUid}) async {
-// retrieve permissions
+  CollectionReference callCollection =
+      FirebaseFirestore.instance.collection('Calls');
+  String appId = "2c4ce455060c4026a824580799b20435";
+
+  
+  Future<void> initAgoraRtcEngine(channelID) async {
     await [Permission.microphone, Permission.camera].request();
-
-    //create the engine
     _engine = await RtcEngine.create(appId);
-    
-    _engine.leaveChannel();
+
     await _engine.enableVideo();
-    _engine.setEventHandler(RtcEngineEventHandler(
-      joinChannelSuccess: (String channel, int uid, int elapsed) {
-        log("local user $uid joined");
-      },
-      userJoined: (int uid, int elapsed) {
-        setRemoteUid(uid);
-        log("remote user $uid joined");
-        remoteUid = uid;
-      },
-      userOffline: (int uid, UserOfflineReason reason) {
-        clearRemoteUid();
-        log("remote user $uid left channel");
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await _engine.setClientRole(ClientRole.Broadcaster);
 
-        remoteUid = null;
-      },
-    ));
-
-    await _engine.startPreview();
-    await _engine.setChannelProfile(ChannelProfile.Communication);
-    await _engine.joinChannel(token, "video", null, 0);
+    _addEventHandlers(
+        onChannelJoined: () {}, onUserJoined: () {}, onUserOffline: () {});
+    await _engine.joinChannel(null, channelID, null, 0);
   }
 
-  endCall() {
+  _addEventHandlers(
+      {required Function() onChannelJoined,
+      required Function() onUserJoined,
+      required Function() onUserOffline}) {
+    _engine.setEventHandler(RtcEngineEventHandler(
+      joinChannelSuccess: (String channel, int uid, int elapsed) {
+        print('$uid successfully joined channel: $channel ');
+      },
+      userJoined: (int uid, int elapsed) {
+        print('remote user $uid joined channel');
+      },
+      userOffline: (int uid, UserOfflineReason reason) {
+        print('remote user $uid left channel');
+      },
+      rtcStats: (stats) {
+        //updates every two seconds
+        // if (_showStats) {
+        //   _stats = stats;
+        // }
+      },
+    ));
+  }
+
+  Future<CallDetails> makeCall(UserDetails from, UserDetails to) async {
+    try {
+      final doc = callCollection.doc();
+      CallDetails call = CallDetails(
+        callerId: from.uid!,
+        callerName: from.userName!,
+        callerPic: from.imageUrl,
+        receiverId: to.uid!,
+        receiverName: to.nameInContact!,
+        receiverPic: to.imageUrl,
+        channelId: doc.id,
+        hasDialled: false,
+      );
+      // await doc.set(call.toJson());
+      call.hasDialled = true;
+
+      return call;
+    } catch (e) {
+      log('Error making call: $e');
+      rethrow;
+    }
+
+    //  return null;
+  }
+  stopAgora(){
     _engine.leaveChannel();
-    _engine.stopPreview();
     _engine.destroy();
+  }
+
+  Future<bool> endCall(CallDetails call) async {
+    try {
+      await callCollection.doc(call.channelId).delete();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Stream<QuerySnapshot<CallDetails>> listenForCall(uid) {
+    return callCollection
+        .where('receiverId', isEqualTo: uid)
+        .withConverter(
+            fromFirestore: (doc, v) => CallDetails.fromJson(doc.data()!),
+            toFirestore: (CallDetails call, _) => call.toJson())
+        .snapshots();
+    ;
   }
 }

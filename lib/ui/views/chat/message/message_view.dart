@@ -2,8 +2,8 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/chat_controller.dart';
-class ChatView extends GetView<ChatController> {
-  const ChatView({Key? key}) : super(key: key);
+class MessageView extends GetView<ChatController> {
+  const MessageView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ChatView extends GetView<ChatController> {
               actions: [
                 IconButton(
                   onPressed: () {
-                    controller.startVideoCall();
+                    controller. dialVideoCall();
                   },
                   icon: const Icon(Icons.videocam_outlined,
                       color: Colors.black, size: 25),

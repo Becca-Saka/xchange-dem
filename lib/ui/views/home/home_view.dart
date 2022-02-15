@@ -2,14 +2,14 @@ import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 
 class HomeView extends GetView<AccountController> {
-  HomeView({Key? key}) : super(key: key);
-  bool isSmall = false, isMedium = false, isLarge = false;
+ const HomeView({Key? key}) : super(key: key);
+  // bool isSmall = false, isMedium = false, isLarge = false;
 
   @override
   Widget build(BuildContext context) {
-    isSmall = MySize.isSmall(context);
-    isMedium = MySize.isMedium(context);
-    isLarge = MySize.isLarge(context);
+    // isSmall = MySize.isSmall(context);
+    // isMedium = MySize.isMedium(context);
+    // isLarge = MySize.isLarge(context);
 
     return Scaffold(
         backgroundColor: Colors.white,
