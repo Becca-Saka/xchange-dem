@@ -7,6 +7,10 @@ class MakeCallScreen extends GetView<CallController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.call),
+        onPressed: () => controller.endCall(),
+      ),
       body: Stack(
         children: [
             Center(
@@ -22,6 +26,7 @@ class MakeCallScreen extends GetView<CallController> {
                 ),
               ),
             ),
+
         ],
       )
     );

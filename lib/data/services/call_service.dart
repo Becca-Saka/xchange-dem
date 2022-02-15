@@ -13,7 +13,6 @@ class CallService {
       FirebaseFirestore.instance.collection('Calls');
   String appId = "2c4ce455060c4026a824580799b20435";
 
-  
   Future<void> initAgoraRtcEngine(channelID) async {
     await [Permission.microphone, Permission.camera].request();
     _engine = await RtcEngine.create(appId);
@@ -42,6 +41,7 @@ class CallService {
         print('remote user $uid left channel');
       },
       rtcStats: (stats) {
+        log('stats: $stats');
         //updates every two seconds
         // if (_showStats) {
         //   _stats = stats;
@@ -63,7 +63,7 @@ class CallService {
         channelId: doc.id,
         hasDialled: false,
       );
-      // await doc.set(call.toJson());
+      await doc.set(call.toJson());
       call.hasDialled = true;
 
       return call;
@@ -71,10 +71,9 @@ class CallService {
       log('Error making call: $e');
       rethrow;
     }
-
-    //  return null;
   }
-  stopAgora(){
+
+  stopAgora() {
     _engine.leaveChannel();
     _engine.destroy();
   }
@@ -82,7 +81,7 @@ class CallService {
   Future<bool> endCall(CallDetails call) async {
     try {
       await callCollection.doc(call.channelId).delete();
-
+      await stopAgora();
       return true;
     } catch (e) {
       return false;

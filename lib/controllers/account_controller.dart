@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:xchange/app/barrel.dart';
+import 'package:xchange/data/models/call_details/call_details.dart';
+import 'package:xchange/data/services/call_service.dart';
 
 class AccountController extends GetxController {
   final AuthenticationService _authenticationService = AuthenticationService();
@@ -14,6 +16,7 @@ class AccountController extends GetxController {
   final FirestoreService _firestoreService = FirestoreService();
   RxInt currentIndex = 0.obs;
   RxString parsedPhoneNumber = ''.obs;
+  final CallService _callService = CallService();
   @override
   void onInit() {
     final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
@@ -52,7 +55,6 @@ class AccountController extends GetxController {
       }).toList();
       usersInChat.value = [...usersInChat, ...result];
     }
-    // log('result: $result');
   }
 
   String getUserContactName(String phoneNumber) {
@@ -72,4 +74,13 @@ class AccountController extends GetxController {
   onIndexChanged(int index) {
     currentIndex.value = index;
   }
+    @override
+  onClose() {
+    _callService.stopAgora();
+    super.onClose();
+  }
+
+
+  Stream<QuerySnapshot<CallDetails>> getCallStream() =>
+      _callService.listenForCall(userDetails.value.uid);
 }

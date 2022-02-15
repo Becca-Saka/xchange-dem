@@ -14,27 +14,28 @@ class CallController extends GetxController {
   int? uid;
 
   final CallService _callService = CallService();
-   CallDetails callDetails;
+  CallDetails callDetails;
   @override
   void onInit() {
     log('onInit ${callDetails.callerId}');
     // callDetails = Get.arguments['callDetails'];
-    initAgora() ;
+    initAgora();
     super.onInit();
   }
+
   @override
-  onClose(){
+  onClose() {
     _callService.stopAgora();
     super.onClose();
   }
 
   initAgora() async {
-  await   _callService.initAgoraRtcEngine(callDetails.channelId);
+    await _callService.initAgoraRtcEngine(callDetails.channelId);
   }
 
   getLocalView() => rtc_local_view.SurfaceView();
   getRemoteView() {
-    if(uid !=null){
+    if (uid != null) {
       return rtc_remote_view.SurfaceView(uid: uid!);
     }
   }
@@ -62,5 +63,7 @@ class CallController extends GetxController {
     });
   }
 
-  endCall() {}
+  endCall() async {
+    await _callService.endCall(callDetails);
+  }
 }

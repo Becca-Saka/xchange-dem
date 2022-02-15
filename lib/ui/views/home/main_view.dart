@@ -1,6 +1,7 @@
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/ui/shared/custom_navbar.dart';
+import 'package:xchange/ui/views/chat/call/call_layout.dart';
 
 import 'group_chats_view.dart';
 import 'home_view.dart';
@@ -11,18 +12,21 @@ class MainView extends GetView<AccountController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          title: const Text(
-            'UniPing',
-            style: TextStyle(
-                color: Colors.black, fontSize: 24, fontWeight: FontWeight.w600),
-          ),
-        ),
-        body: getBody(),
-        bottomNavigationBar: _buildBottomBar()));
+    return CallLayout(
+        scaffold: Obx(() => Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              title: const Text(
+                'UniPing',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            body: getBody(),
+            bottomNavigationBar: _buildBottomBar())));
   }
 
   Widget _buildBottomBar() {
@@ -62,9 +66,7 @@ class MainView extends GetView<AccountController> {
   }
 
   Widget getBody() {
-    
     List<Widget> pages = [
-    
       GroupChatsView(),
       HomeView(),
       SettingsView(),
@@ -75,4 +77,3 @@ class MainView extends GetView<AccountController> {
     );
   }
 }
-
