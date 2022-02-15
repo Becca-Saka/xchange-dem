@@ -12,7 +12,6 @@ import 'package:xchange/ui/views/authentication/verify_phone_view.dart';
 import 'package:xchange/ui/views/chat/chat_view.dart';
 import 'package:xchange/ui/views/chat/view_user.dart';
 import 'package:xchange/ui/views/home/main_view.dart';
-// import 'package:xchange/ui/home/home_view.dart';
 
 part 'app_routes.dart';
 

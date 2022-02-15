@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
-import 'package:xchange/services/call_service.dart';
+import 'package:xchange/data/services/call_service.dart';
 import 'package:xchange/ui/views/chat/view_image.dart';
 import '../ui/views/chat/call/call_view.dart';
 
