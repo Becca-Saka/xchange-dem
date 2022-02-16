@@ -1,26 +1,31 @@
-import 'dart:developer';
-
-import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:xchange/app/barrel.dart';
-
-import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
-import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
+import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/data/models/call_details/call_details.dart';
 import 'package:xchange/data/services/call_service.dart';
+import 'package:xchange/ui/views/chat/call/call_view.dart';
 
 class CallController extends GetxController {
   CallController({required this.callDetails});
-  int? uid;
-
+  Rx<int?> remoteuid = Rx<int?>(null);
   final CallService _callService = CallService();
   CallDetails callDetails;
+  RxBool joinedChannel = RxBool(false);
+  final AccountController _accountController = Get.find();
+  String get currentUserId => _accountController.userDetails.value.uid!;
+  RxBool micMuted = RxBool(false);
+  RxBool videoDisabled = RxBool(false);
+
   @override
   void onInit() {
-    log('onInit ${callDetails.callerId}');
-    // callDetails = Get.arguments['callDetails'];
-    initAgora();
+    initializeCall();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    addCallStatusListener();
+    super.onReady();
   }
 
   @override
@@ -29,41 +34,62 @@ class CallController extends GetxController {
     super.onClose();
   }
 
-  initAgora() async {
-    await _callService.initAgoraRtcEngine(callDetails.channelId);
-  }
-
-  getLocalView() => rtc_local_view.SurfaceView();
-  getRemoteView() {
-    if (uid != null) {
-      return rtc_remote_view.SurfaceView(uid: uid!);
+  initializeCall() async {
+    await initAgora();
+    if (callDetails.receiverId != currentUserId) {
+      _callService.joinChannel();
     }
   }
 
-  addPostFrameCallback() {
+  initAgora() async => await _callService
+          .initAgoraRtcEngine(callDetails.channelId, onChannelJoined: (uid) {
+        joinedChannel.value = true;
+        update();
+      }, onJoined: (int uid) {
+        remoteuid.value = uid;
+        update();
+      });
+
+  addCallStatusListener() {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
-      //TODO: Listen for call documents'
-
-      // userProvider = Provider.of<UserProvider>(context, listen: false);
-
-      // callStreamSubscription = callMethods
-      //     .callStream(uid: userProvider.getUser.uid)
-      //     .listen((DocumentSnapshot ds) {
-      //   // defining the logic
-      //   switch (ds.data) {
-      //     case null:
-      //       // snapshot is null which means that call is hanged and documents are deleted
-      //       Navigator.pop(context);
-      //       break;
-
-      //     default:
-      //       break;
-      //   }
-      // });
+      _callService
+          .listenForCallEnd(callDetails.channelId)
+          .listen((DocumentSnapshot ds) async {
+        if (!ds.exists && ds.data() == null) {
+          await _callService.stopAgora();
+          Get.back();
+        }
+      });
     });
   }
 
-  endCall() async {
-    await _callService.endCall(callDetails);
+  answerVideoCall() async {
+    _callService.joinChannel();
+    joinedChannel.value = true;
+    update();
   }
+
+  muteMic() {
+    _callService.muteMic(micMuted.value);
+    if(micMuted.value) {
+      micMuted.value = false;
+    } else {
+      micMuted.value = true;
+    }
+  }
+  disableVideo() {
+   _callService.disableVideo(videoDisabled.value);
+    if(videoDisabled.value) {
+      videoDisabled.value = false;
+    } else {
+      videoDisabled.value = true;
+    }
+  }
+
+  switchCamera() {
+    _callService.flipCamera();
+  }
+
+
+  endCall() async => await _callService.endCall(callDetails);
 }

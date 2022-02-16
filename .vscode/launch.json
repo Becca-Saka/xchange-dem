@@ -20,6 +20,20 @@
             "request": "launch",
             "type": "dart",
             "args": ["--verbose"]
+        },
+        {
+            "name": "xchange pixel (verbose mode)",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554",
+            "args": ["--verbose"]
+        },
+        {
+            "name": "xchange second (verbose mode)",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5556",
+            "args": ["--verbose"]
         }
     ]
 }

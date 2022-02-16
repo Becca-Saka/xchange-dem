@@ -2,6 +2,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/chat_controller.dart';
+
 class MessageView extends GetView<ChatController> {
   const MessageView({Key? key}) : super(key: key);
 
@@ -48,7 +49,7 @@ class MessageView extends GetView<ChatController> {
               actions: [
                 IconButton(
                   onPressed: () {
-                    controller. dialVideoCall();
+                    controller.dialVideoCall();
                   },
                   icon: const Icon(Icons.videocam_outlined,
                       color: Colors.black, size: 25),
@@ -119,14 +120,13 @@ class MessageView extends GetView<ChatController> {
                                         .parseTimeStamp(element.time)
                                         .hour,
                                   ),
-                               
                                   groupHeaderBuilder: (Message element) {
                                     return Center(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0),
                                         child: Text(
-                                          '${controller.readTimeStampDaysOnly(element.time)}',
+                                          controller.readTimeStampDaysOnly(element.time),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'Poppins',
@@ -187,7 +187,9 @@ class MessageView extends GetView<ChatController> {
                                                     : 0,
                                               ),
                                               child: Text(
-                                                DateFormat.Hm().format(controller.parseTimeStamp(element.time)),
+                                                DateFormat.Hm().format(
+                                                    controller.parseTimeStamp(
+                                                        element.time)),
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w500,
@@ -283,26 +285,13 @@ class MessageView extends GetView<ChatController> {
                     child: Row(
                       children: <Widget>[
                         InkWell(
-                          onTap: () {
-                            controller.openImageLocationDialog();
-                          },
-                          child: SizedBox(
-                              height: isSmall
-                                  ? 20
-                                  : isLarge
-                                      ? 30
-                                      : 25,
-                              width: isSmall
-                                  ? 20
-                                  : isLarge
-                                      ? 30
-                                      : 25,
-                              child: Image.asset(
-                                'assets/images/Plus.png',
-                                cacheHeight: 25,
-                                cacheWidth: 25,
-                              )),
-                        ),
+                            onTap: () {
+                              controller.openImageLocationDialog();
+                            },
+                            child: const Icon(
+                              Coolicons.plus,
+                              size: 30,
+                            )),
                         widthMin(),
                         Expanded(
                           child: Container(
@@ -329,26 +318,14 @@ class MessageView extends GetView<ChatController> {
                         ),
                         widthMin(),
                         InkWell(
-                          onTap: controller.sendMessage,
-                          child: SizedBox(
-                              height: isSmall
-                                  ? 20
-                                  : isLarge
-                                      ? 37
-                                      : 32,
-                              width: isSmall
-                                  ? 20
-                                  : isLarge
-                                      ? 37
-                                      : 32,
-                              child: Center(
-                                child: Image.asset(
-                                  'assets/images/Send.png',
-                                  cacheHeight: 36,
-                                  cacheWidth: 36,
-                                ),
-                              )),
-                        ),
+                            onTap: controller.sendMessage,
+                            child: Transform.scale(
+                              scale: 0.8,
+                              child: const Icon(
+                                Icons.send,
+                                size: 30,
+                              ),
+                            )),
                       ],
                     ),
                   ),

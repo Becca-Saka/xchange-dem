@@ -49,7 +49,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.main,
-      page: () => MainView(),
+      page: () => const MainView(),
       binding: AccountBinding(),
     ),
    

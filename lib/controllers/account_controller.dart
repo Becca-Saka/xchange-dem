@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/data/models/call_details/call_details.dart';
 import 'package:xchange/data/services/call_service.dart';
@@ -14,7 +13,7 @@ class AccountController extends GetxController {
   UserDetails currentChat = UserDetails();
   final ContactService _contactService = ContactService();
   final FirestoreService _firestoreService = FirestoreService();
-  RxInt currentIndex = 0.obs;
+  RxInt currentIndex = 1.obs;
   RxString parsedPhoneNumber = ''.obs;
   final CallService _callService = CallService();
   @override
@@ -30,7 +29,7 @@ class AccountController extends GetxController {
   Future<void> getFormattedNumber() async {
     final p =
         await NumberParser.getNumberDetails(userDetails.value.phoneNumber!);
-    log('Parese Phone Number $p');
+    log('Paresed Phone Number $p');
     parsedPhoneNumber.value = p!['international'];
     log('Parsed Phone Numbersss ${parsedPhoneNumber.value}');
   }
@@ -74,12 +73,12 @@ class AccountController extends GetxController {
   onIndexChanged(int index) {
     currentIndex.value = index;
   }
-    @override
+
+  @override
   onClose() {
     _callService.stopAgora();
     super.onClose();
   }
-
 
   Stream<QuerySnapshot<CallDetails>> getCallStream() =>
       _callService.listenForCall(userDetails.value.uid);
