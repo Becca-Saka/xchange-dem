@@ -9,66 +9,31 @@ class FirestoreService {
   final messagecollection = FirebaseFirestore.instance.collection("Messages");
   final firestoreInstance = FirebaseFirestore.instance;
   final usercollection = FirebaseFirestore.instance.collection("Users");
-  final deckcollection = FirebaseFirestore.instance.collection("Decks");
+  final privateChatCollection =
+      FirebaseFirestore.instance.collection("Private Chatroom");
+  final publicChatcollection =
+      FirebaseFirestore.instance.collection("Public Chatroom");
 
-  Future<void> removeMatch(
-      UserDetails removeUser, MatchDetails matchDetails) async {
-    //TODO remove match from user
+  // Future<List<MatchDetails>> getCurrentlyMatchedUser() async {
+  //   // final AuthController _controller = Get.find();
+  //   return await privateChatCollection
+  //       .where('uid', whereIn: ['_controller.currentUser.value.currentChatrooms'])
+  //       .get()
+  //       .then((value) =>
+  //           value.docs.map((e) => MatchDetails.fromJson(e.data())).toList());
+  // }
+
+  Stream<List<MatchDetails>> getCurrentlyMatchedUserStream(
+      List<String> currentChatrooms) {
     
-    // final AuthController _controller = Get.find();
-    // final currentUser = _controller.currentUser.value;
-    // removeUser.currentMatches!.remove(currentUser.uid!);
-    // removeUser.currentDeck!.remove(matchDetails.uid);
-    // removeUser.noOfCurrentMatches = removeUser.currentDeck!.length;
-
-    // currentUser.currentMatches!.remove(removeUser.uid!);
-    // currentUser.currentDeck!.remove(matchDetails.uid);
-    // currentUser.noOfCurrentMatches = currentUser.currentDeck!.length;
-    // await FirebaseFirestore.instance.runTransaction(
-    //   (transaction) async {
-    //     transaction
-    //         .update(usercollection.doc(currentUser.uid), currentUser.toJson())
-    //         .update(usercollection.doc(removeUser.uid), removeUser.toJson());
-    //   },
-    // );
-    // HttpsCallable callable =
-    //     FirebaseFunctions.instance.httpsCallable('recursiveDeleteDeck');
-    // await callable.call({'path': 'Decks/${matchDetails.uid}'});
-  }
-
-  Future updateIsNew(MatchDetails matchDetails) async {
-    // final AuthController _controller = Get.find();
-    // matchDetails.isNew![_controller.currentUser.value.uid!] = false;
-    // await deckcollection.doc(matchDetails.uid).update({
-    //   'isNew': matchDetails.isNew,
-    // });
-  }
-
-  Future<List<MatchDetails>> getCurrentlyMatchedUser() async {
-    // final AuthController _controller = Get.find();
-    return await deckcollection
-        .where('uid', whereIn: ['_controller.currentUser.value.currentDeck'])
-        .get()
-        .then((value) =>
-            value.docs.map((e) => MatchDetails.fromJson(e.data())).toList());
-  }
-
-  Stream<List<MatchDetails>> getCurrentlyMatchedUserStream() {
-    // final AuthController _controller = Get.find();
-    final currentDeck = ['_controller.currentUser.value.currentDeck' ]
-    // ??
-    //     AppRepo.currentUser.currentDeck
-        ;
-    return deckcollection
-        .where('uid', whereIn: currentDeck)
+    return privateChatCollection
+        .where('uid', whereIn: currentChatrooms)
         .snapshots()
-        .map((event) => event.docs.map((e) {
-              final json = e.data();
+        .map((event) => event.docChanges.map((e) {
+              final json = e.doc.data()!;
               final MatchDetails match = MatchDetails(
                 uid: json['uid'] as String,
-                isNew: Map<String, bool>.from(json['isNew'] as Map),
                 messageId: json['messageId'] as String?,
-                timeMatched: json['timeMatched'],
                 users: (json['users'] as List<dynamic>)
                     .map((e) => e as String)
                     .toList(),
@@ -84,13 +49,9 @@ class FirestoreService {
             }).toList());
   }
 
-  Stream<List<UserDetails>> getUsersDetail() {
-    // final AuthController _controller = Get.find();
-    final currentMatches = ['_controller.currentUser.value.currentMatches'] 
-    // ??
-    //     AppRepo.currentUser.currentMatches
-        ;
-    return usercollection.where('uid', whereIn: currentMatches).snapshots().map(
+  Stream<List<UserDetails>> getUsersDetail(List<String> friendList) {
+    
+    return usercollection.where('uid', whereIn: friendList).snapshots().map(
         (event) =>
             event.docs.map((e) => UserDetails.fromJson(e.data())).toList());
   }
@@ -103,10 +64,7 @@ class FirestoreService {
   Future<String> saveChatImage(String path, String id) async {
     storage.Reference storageReference = storage.FirebaseStorage.instance
         .ref()
-        .child('Decks')
-        .child(id)
-        .child('Chats')
-        .child('${Timestamp.now().microsecondsSinceEpoch}');
+        .child('Chatrooms/$id/${Timestamp.now().microsecondsSinceEpoch}');
 
     final storage.UploadTask uploadTask = storageReference.putFile(File(path));
     final storage.TaskSnapshot downloadUrl =
@@ -115,12 +73,12 @@ class FirestoreService {
     return url;
   }
 
-  Future<void> updateReadMessage(String uid) async {
+  Future<void> updateReadMessage(String uid, String userid) async {
     // final AuthController _controller = Get.find();
     // final currentUser = _controller.currentUser.value;
-    await deckcollection.doc(uid).update(
+    await privateChatCollection.doc(uid).update(
       {
-        '{currentUser.uid}Unread': [],
+        '${userid}Unread': [],
         'isRead': true,
         'unReadCount': 0,
       },
@@ -128,23 +86,26 @@ class FirestoreService {
   }
 
   Future<MatchDetails> createChat(String id, UserDetails current) async {
-    final doc = deckcollection.doc();
+    final doc = privateChatCollection.doc();
 
     final message = MatchDetails(
       uid: doc.id,
       users: [current.uid!, id],
     );
 
-    current.currentDeck!.add(doc.id);
+    current.currentChatrooms.add(doc.id);
     await doc
         .set(
           message.toJson(),
         )
         .whenComplete(() async => await usercollection.doc(current.uid).update(
-              {'currentDeck': FieldValue.arrayUnion(current.currentDeck!)},
+              {
+                'currentChatrooms':
+                    FieldValue.arrayUnion(current.currentChatrooms)
+              },
             ).whenComplete(() async => await usercollection.doc(id).update(
                   {
-                    'currentDeck': FieldValue.arrayUnion([doc.id])
+                    'currentChatrooms': FieldValue.arrayUnion([doc.id])
                   },
                 )));
 
@@ -166,7 +127,7 @@ class FirestoreService {
       matchDetails = chatDetails;
     }
 
-    var docs = deckcollection.doc(key);
+    var docs = privateChatCollection.doc(key);
     final chatDoc = docs.collection('Chats').doc();
 
     final messageDetail = Message(
@@ -186,7 +147,7 @@ class FirestoreService {
       'messageId': currentUser.uid,
       'recentmessage': message,
       'recentMessageTime': FieldValue.serverTimestamp(),
-      '$otherUser\Unread': FieldValue.arrayUnion([
+      '${otherUser}Unread': FieldValue.arrayUnion([
         chatDoc.id,
       ]),
     };
@@ -214,7 +175,7 @@ class FirestoreService {
   }
 
   Stream<List<Message>> getMessage(String uid) {
-    return deckcollection
+    return privateChatCollection
         .doc(uid)
         .collection('Chats')
         .snapshots()
@@ -224,8 +185,17 @@ class FirestoreService {
   }
 
   Future<List<Message>> getFirstMessage(String uid) async {
-    final mes = await deckcollection.doc(uid).collection('Chats').get();
+    final mes = await privateChatCollection.doc(uid).collection('Chats').get();
     return mes.docs.map((e) => Message.fromJson(e.data())).toList();
+  }
+
+  Stream<List<Message>> getNewChatroom(String uid) {
+    return privateChatCollection
+        .where('users', arrayContains: uid)
+        .snapshots()
+        .map((event) =>
+            event.docs.map((e) => Message.fromJson(e.data())).toList())
+        .asBroadcastStream();
   }
 
   Future<void> blockUser(
@@ -241,7 +211,7 @@ class FirestoreService {
     final user =
         await usercollection.where('phoneNumber', whereIn: phone).get();
     return user.docs.map((e) {
-      final users =UserDetails.fromJson(e.data());
+      final users = UserDetails.fromJson(e.data());
       users.inContact = true;
       return users;
     }).toList();

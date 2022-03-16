@@ -12,12 +12,14 @@ UserDetails _$UserDetailsFromJson(Map json) => UserDetails(
       email: json['email'] as String?,
       imageUrl: json['imageUrl'] as String?,
       lat: (json['lat'] as num?)?.toDouble(),
-      currentDeck: (json['currentDeck'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      currentMatches: (json['currentMatches'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      currentChatrooms: (json['currentChatrooms'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      friendList: (json['friendList'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       fcmToken: json['fcmToken'] as String?,
       noOfCurrentMatches: json['noOfCurrentMatches'] as int? ?? 0,
       phoneNumber: json['phoneNumber'] as String?,
@@ -37,6 +39,6 @@ Map<String, dynamic> _$UserDetailsToJson(UserDetails instance) =>
       'fcmToken': instance.fcmToken,
       'lat': instance.lat,
       'long': instance.long,
-      'currentMatches': instance.currentMatches,
-      'currentDeck': instance.currentDeck,
+      'friendList': instance.friendList,
+      'currentChatrooms': instance.currentChatrooms,
     };

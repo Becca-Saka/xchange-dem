@@ -5,6 +5,8 @@ import 'package:xchange/app/barrel.dart';
 import 'package:xchange/data/models/call_details/call_details.dart';
 import 'package:xchange/data/services/call_service.dart';
 
+import 'package:rxdart/rxdart.dart' as rx;
+
 class AccountController extends GetxController {
   final AuthenticationService _authenticationService = AuthenticationService();
   Rx<UserDetails> userDetails = Rx<UserDetails>(UserDetails());
@@ -18,9 +20,12 @@ class AccountController extends GetxController {
   final CallService _callService = CallService();
   @override
   void onInit() {
-    final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
-    userDetails.value =
-        UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
+    log('onInit ${LocalStorage.userDetail.val}');
+    if (LocalStorage.userDetail.val.isNotEmpty) {
+      final userFromStorage = jsonDecode(LocalStorage.userDetail.val);
+      userDetails.value =
+          UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
+    }
     getFormattedNumber();
     getRegisteredUserContacts();
     super.onInit();
@@ -36,8 +41,8 @@ class AccountController extends GetxController {
 
   navigateToChat(UserDetails user) {
     currentChat = user;
-    Get.toNamed(Routes.CHAT,
-        arguments: {'match': MatchDetails(users: [], isNew: {}, uid: '')});
+    Get.toNamed(Routes.chat,
+        arguments: {'match': MatchDetails(users: [], uid: '')});
   }
 
   logout() async {
@@ -55,6 +60,8 @@ class AccountController extends GetxController {
       usersInChat.value = [...usersInChat, ...result];
     }
   }
+
+  getNewMessages() {}
 
   String getUserContactName(String phoneNumber) {
     if (_contactService.userContacts != null) {
@@ -78,6 +85,17 @@ class AccountController extends GetxController {
   onClose() {
     _callService.stopAgora();
     super.onClose();
+  }
+
+  Stream<List<dynamic>> combineStream() {
+    return rx.CombineLatestStream.list([
+      _firestoreService
+          .getCurrentlyMatchedUserStream(userDetails.value.currentChatrooms),
+      _firestoreService.getUsersDetail(userDetails.value.friendList).map(
+          (event) => event
+              .map((e) => e.nameInContact = getUserContactName(e.phoneNumber!))
+              .toList()),
+    ]);
   }
 
   Stream<QuerySnapshot<CallDetails>> getCallStream() =>

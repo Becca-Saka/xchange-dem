@@ -76,8 +76,8 @@ class AuthenticationService {
       User user = userCredential.user!;
       UserDetails userDetails = UserDetails(
           userName: name,
-          currentMatches: [],
-          currentDeck: [],
+          friendList: [],
+          currentChatrooms: [],
           lat: null,
           long: null,
           uid: user.uid,
@@ -133,14 +133,17 @@ class AuthenticationService {
   }
 
   Future<bool> checkLogin() async {
+    log('checking login');
     bool isLoggedIn = false;
     try {
       User? user = auth.currentUser;
+      log('user is ${user}');
       if (user != null) {
         IdTokenResult tokenResult = await user.getIdTokenResult(true);
+        log('tokenResult ${tokenResult.token}');
         if (tokenResult.token != null) {
           isLoggedIn = true;
-          LocalStorage.userLoggedIn.val = true;
+          // LocalStorage.userLoggedIn.val = true;
         }
       } else {
         isLoggedIn = false;
@@ -149,6 +152,8 @@ class AuthenticationService {
       log(' ERROR $e');
       isLoggedIn = false;
     }
+
+    LocalStorage.userLoggedIn.val = isLoggedIn;
     return isLoggedIn;
   }
 

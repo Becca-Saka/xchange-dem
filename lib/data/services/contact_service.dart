@@ -4,7 +4,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:xchange/app/barrel.dart';
 
 class ContactService {
-List<Contact>? userContacts;
+  List<Contact>? userContacts;
   List<Map<String, dynamic>> mappedUserContacts = [];
   //get user contact
   Future<PermissionStatus> getContactPermission() async {
@@ -18,7 +18,7 @@ List<Contact>? userContacts;
     }
   }
 
-  Future<List<Contact>?> _getContactFromPhone() async {
+  Future<List<Contact>?> getContactFromPhone() async {
     try {
       if (await getContactPermission() == PermissionStatus.granted) {
         List<Contact> contacts = (await ContactsService.getContacts(
@@ -33,14 +33,14 @@ List<Contact>? userContacts;
     }
   }
 
-
   Future<List<String>> getContactNumbers() async {
     final List<String> standardNumbers = [];
-    userContacts = await _getContactFromPhone();
-    if (userContacts != null) {
-      userContacts!.removeWhere((element) => element.phones == null);
-      userContacts!.removeWhere((element) => !GetUtils.isPhoneNumber(
+    final contacts = await getContactFromPhone();
+    if (contacts != null) {
+      contacts.removeWhere((element) => element.phones == null);
+      contacts.removeWhere((element) => !GetUtils.isPhoneNumber(
           element.phones![0].value!.removeAllWhitespace));
+      userContacts = contacts;
 
       // userContacts.removeWhere(
       //     (element) => element.phones![0].value!.s GetUtils.isPhoneNumber(element.phones![0].value!));

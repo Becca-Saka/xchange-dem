@@ -2,11 +2,7 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   static const root = '/root';
-  // static const home = '/home';
-  static const SIGNUP = '/signup';
-  static const LOGIN = '/login';
-  static const EXP = '/exp';
-  static const CHAT = '/chat';
+  static const chat = '/chat';
   static const VIEWUSER = '/viewuser';
   static const EDITPROFILE = '/editprofile';
 
@@ -25,4 +21,6 @@ abstract class Routes {
   static const authentication = '/authentication';
 
   static const main ='/main';
+
+  static const contactlist = '/contactlist';
 }

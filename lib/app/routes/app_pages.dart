@@ -11,6 +11,7 @@ import 'package:xchange/ui/views/authentication/user_info_view.dart';
 import 'package:xchange/ui/views/authentication/verify_phone_view.dart';
 import 'package:xchange/ui/views/chat/message/message_view.dart';
 import 'package:xchange/ui/views/chat/message/view_user.dart';
+import 'package:xchange/ui/views/home/contact_list.dart';
 import 'package:xchange/ui/views/home/main_view.dart';
 
 part 'app_routes.dart';
@@ -54,9 +55,13 @@ class AppPages {
     ),
    
     GetPage(
-      name: Routes.CHAT,
+      name: Routes.chat,
       page: () => const MessageView(),
       binding: ChatBinding(),
+    ),
+    GetPage(
+      name: Routes.contactlist,
+      page: () => const ContactListView(),
     ),
     GetPage(
       name: Routes.VIEWUSER,

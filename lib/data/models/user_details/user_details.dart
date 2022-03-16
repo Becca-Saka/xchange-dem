@@ -14,8 +14,8 @@ class UserDetails {
   int noOfCurrentMatches;
   String? imageUrl, fcmToken;
   double? lat, long;
-  List<String>? currentMatches;
-  List<String>? currentDeck;
+  List<String> friendList;
+  List<String> currentChatrooms;
   @JsonKey(ignore: true)
   bool inContact;
 
@@ -26,8 +26,8 @@ class UserDetails {
       this.email,
       this.imageUrl,
       this.lat,
-      this.currentDeck,
-      this.currentMatches,
+      this.currentChatrooms = const [],
+      this.friendList= const [],
       this.fcmToken,
       this.noOfCurrentMatches = 0,
       this.phoneNumber,
@@ -42,6 +42,6 @@ class UserDetails {
 
   @override
   String toString() {
-    return 'uid: $uid, name: $userName, lat: $lat, long: $long, currentmatches: $currentMatches';
+    return 'uid: $uid, name: $userName, lat: $lat, long: $long, currentmatches: $friendList';
   }
 }

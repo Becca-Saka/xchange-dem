@@ -8,9 +8,7 @@ part 'match_details.g.dart';
 class MatchDetails {
   String? uid;
   List<String>? users;
-  Map<String, bool>? isNew;
   String? messageId;
-  var timeMatched;
   List<String>? unReadMessagesList;
   String? recentmessage;
   var recentMessageTime;
@@ -18,9 +16,7 @@ class MatchDetails {
   List<Message>? messages;
   MatchDetails(
       { this.uid,
-       this.isNew,
       this.messageId,
-      this.timeMatched,
        this.users,
       this.messages,
       this.recentMessageTime,

@@ -1,13 +1,10 @@
 import 'dart:developer';
-
-import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/controllers/call_controller.dart';
 import 'package:xchange/data/models/call_details/call_details.dart';
 import 'package:xchange/data/services/call_service.dart';
-import 'package:xchange/ui/shared/coming_soon.dart';
 import 'package:xchange/ui/views/chat/call/call_view.dart';
 import 'package:xchange/ui/views/chat/message/view_image.dart';
 
@@ -37,13 +34,13 @@ class ChatController extends GetxController {
   }
 
   getMatchDetails() async {
-    if (currentChat.currentDeck != null) {
-      final match = currentChat.currentDeck!
-          .where((element) => currentUser.currentDeck!.contains(element))
+    if (currentChat.currentChatrooms.isNotEmpty) {
+      final match = currentChat.currentChatrooms
+          .where((element) => currentUser.currentChatrooms.contains(element))
           .toList();
       if (match.isNotEmpty) {
         final details =
-            await _firestoreService.deckcollection.doc(match.first).get();
+            await _firestoreService.privateChatCollection.doc(match.first).get();
         matchDetails.value = MatchDetails.fromJson(details.data()!);
       }
     }
@@ -59,7 +56,7 @@ class ChatController extends GetxController {
     if (matchDetails.value != null &&
         matchDetails.value!.unReadMessagesList != null &&
         matchDetails.value!.messageId != currentUser.uid) {
-      _firestoreService.updateReadMessage(matchDetails.value!.uid!);
+      _firestoreService.updateReadMessage(matchDetails.value!.uid!, currentUser.uid!);
     }
   }
 
@@ -104,7 +101,7 @@ class ChatController extends GetxController {
     } else if (diff.inDays == 1) {
       time = 'Yesterday';
     } else {
-      time = '${DateFormat.yMMMd().format(times)}';
+      time = DateFormat.yMMMd().format(times);
     }
     return time;
   }
