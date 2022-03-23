@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:xchange/app/barrel.dart';
-import 'package:xchange/data/models/call_details/call_details.dart';
-import 'package:xchange/data/services/call_service.dart';
+import 'package:xchange/data-old/models/call_details/call_details.dart';
+import 'package:xchange/data-old/services-old/call_service.dart';
 
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:xchange/data/repository/contact_repository.dart';
 
 class AccountController extends GetxController {
   final AuthenticationService _authenticationService = AuthenticationService();
@@ -27,15 +28,20 @@ class AccountController extends GetxController {
           UserDetails.fromJson(userFromStorage as Map<String, dynamic>);
     }
     getFormattedNumber();
-    getRegisteredUserContacts();
+    // getRegisteredUserContacts();
+    getUserContactv();
     super.onInit();
+  }
+
+  getUserContactv() async {
+    ContactRepository().loadContacts();
   }
 
   Future<void> getFormattedNumber() async {
     final p =
         await NumberParser.getNumberDetails(userDetails.value.phoneNumber!);
     log('Paresed Phone Number $p');
-    parsedPhoneNumber.value = p!['international'];
+    parsedPhoneNumber.value = p['international'];
     log('Parsed Phone Numbersss ${parsedPhoneNumber.value}');
   }
 

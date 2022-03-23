@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:xchange/data/models/message_details/message_details.dart';
+import 'package:xchange/data-old/models/message_details/message_details.dart';
 part 'match_details.g.dart';
 
 @JsonSerializable(

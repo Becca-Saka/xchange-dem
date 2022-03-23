@@ -24,9 +24,9 @@ class NumberParser {
     );
   }
 
-  static Future<Map<String, dynamic>?> getNumberDetails(String number,
+  static Future<Map<String, dynamic>> getNumberDetails(String number,
       {String? region}) async {
-    var result;
+    Map<String, dynamic> result = {};
     try {
       await _flutterLibphonenumber.init();
       if (number.startsWith('+')) {
@@ -44,7 +44,7 @@ class NumberParser {
       // log('$result');
     } on PlatformException catch (e) {
       if (e.code == 'InvalidNumber') {
-        log('Invalid number: $number');
+        // log('Invalid number: $number');
       }
     }
     return result;

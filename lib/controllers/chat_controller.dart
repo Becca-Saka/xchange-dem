@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/controllers/call_controller.dart';
-import 'package:xchange/data/models/call_details/call_details.dart';
-import 'package:xchange/data/services/call_service.dart';
+import 'package:xchange/data-old/models/call_details/call_details.dart';
+import 'package:xchange/data-old/services-old/call_service.dart';
 import 'package:xchange/ui/views/chat/call/call_view.dart';
 import 'package:xchange/ui/views/chat/message/view_image.dart';
 

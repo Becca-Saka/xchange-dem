@@ -3,7 +3,7 @@ import 'package:xchange/controllers/call_controller.dart';
 
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
-import 'package:xchange/data/models/call_details/call_details.dart';
+import 'package:xchange/data-old/models/call_details/call_details.dart';
 
 class CallView extends StatelessWidget {
   const CallView({Key? key}) : super(key: key);

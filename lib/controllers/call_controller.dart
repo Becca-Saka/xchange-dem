@@ -1,8 +1,8 @@
 import 'package:flutter/scheduler.dart';
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
-import 'package:xchange/data/models/call_details/call_details.dart';
-import 'package:xchange/data/services/call_service.dart';
+import 'package:xchange/data-old/models/call_details/call_details.dart';
+import 'package:xchange/data-old/services-old/call_service.dart';
 
 class CallController extends GetxController {
   CallController({required this.callDetails});

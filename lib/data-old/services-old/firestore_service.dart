@@ -22,6 +22,32 @@ class FirestoreService {
   //       .then((value) =>
   //           value.docs.map((e) => MatchDetails.fromJson(e.data())).toList());
   // }
+   Stream<List<MatchDetails>> listenForNewMessage(
+      List<String> currentChatrooms) {
+    
+    return privateChatCollection
+        .where('uid', whereIn: currentChatrooms)
+        .where('uid', whereIn: currentChatrooms)
+        .snapshots()
+        .map((event) => event.docChanges.map((e) {
+              final json = e.doc.data()!;
+              final MatchDetails match = MatchDetails(
+                uid: json['uid'] as String,
+                messageId: json['messageId'] as String?,
+                users: (json['users'] as List<dynamic>)
+                    .map((e) => e as String)
+                    .toList(),
+                recentMessageTime: json['recentMessageTime'],
+                unReadMessagesList:
+                    (json['{_controller.currentUser.value.uid}Unread']
+                            as List<dynamic>?)
+                        ?.map((e) => e as String)
+                        .toList(),
+                recentmessage: json['recentmessage'] as String?,
+              );
+              return match;
+            }).toList());
+  }
 
   Stream<List<MatchDetails>> getCurrentlyMatchedUserStream(
       List<String> currentChatrooms) {

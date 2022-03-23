@@ -1,25 +1,21 @@
-
 class UserContact {
   String? uid, contactId;
   String? userName;
   String? displayName, nameInContact;
   String? phoneNumber, countryCode;
   String? imageUrl;
-  late int unreadMessageCount;
-  late bool isAppUser;
+  int unreadMessageCount = 0;
 
   UserContact(
-      {uid,
-      contactId,
-      userName,
-      displayName,
-      nameInContact,
-      phoneNumber,
-      countryCode,
-      imageUrl,
-      unreadMessageCount = 0,
-      isAppUser = false});
-
+      {this.uid,
+      this.contactId,
+      this.userName,
+      this.displayName,
+      this.nameInContact,
+      this.phoneNumber,
+      this.countryCode,
+      this.imageUrl,
+      this.unreadMessageCount =0,});
 
   UserContact.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -31,11 +27,10 @@ class UserContact {
     countryCode = json['countryCode'];
     imageUrl = json['imageUrl'];
     unreadMessageCount = json['unreadMessageCount'];
-    isAppUser = json['isAppUser'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['uid'] = uid;
     data['contactId'] = contactId;
     data['userName'] = userName;
@@ -45,7 +40,6 @@ class UserContact {
     data['countryCode'] = countryCode;
     data['imageUrl'] = imageUrl;
     data['unreadMessageCount'] = unreadMessageCount;
-    data['isAppUser'] = isAppUser;
     return data;
   }
 }

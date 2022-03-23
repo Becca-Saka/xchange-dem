@@ -19,7 +19,7 @@ class HomeView extends GetView<AccountController> {
           Get.toNamed(Routes.contactlist);
         },
         child: const Icon(
-          Icons.add,
+          Icons.edit,
           color: Colors.black,
         ),
       ),

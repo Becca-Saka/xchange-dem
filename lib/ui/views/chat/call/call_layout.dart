@@ -1,7 +1,7 @@
 import 'package:xchange/app/barrel.dart';
 import 'package:xchange/controllers/account_controller.dart';
 import 'package:xchange/controllers/call_controller.dart';
-import 'package:xchange/data/models/call_details/call_details.dart';
+import 'package:xchange/data-old/models/call_details/call_details.dart';
 import 'package:xchange/ui/views/chat/call/call_view.dart';
 
 class CallLayout extends GetView<AccountController> {

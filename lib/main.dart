@@ -1,27 +1,60 @@
+import 'dart:io';
 import 'dart:math' as math;
-import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:xchange/app/barrel.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:xchange/data/services/sample_emulator.dart';
 
-const bool USE_EMULATOR = false;
+const USE_EMULATOR = true;
+
+// Future _connectToFirebaseEmulator() async {
+//   FirebaseFirestore.instance.settings = const Settings(
+//     host: 'localhost:8080',
+//     sslEnabled: false,
+//     persistenceEnabled: false,
+//   );
+
+//   await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+
+//   await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+//   USE_EMULATOR = true;
+// }
+/// Connnect to the firebase emulator for Firestore and Authentication
+Future _connectToFirebaseEmulator() async {
+  final localHostString = Platform.isAndroid ? '10.0.2.2' : 'localhost';
+
+  FirebaseFirestore.instance.settings = Settings(
+    host: '$localHostString:8080',
+    sslEnabled: false,
+    persistenceEnabled: false,
+  );
+  await FirebaseStorage.instance.useStorageEmulator('localhost', 9199);
+
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init('userProfile');
   await Firebase.initializeApp();
+  if (USE_EMULATOR) {
+    await _connectToFirebaseEmulator();
+  }
+  await GetStorage.init('userProfile');
+  await GetStorage.init('userContactsBox');
   await AuthenticationService.to.checkLogin();
-  
+
   if (USE_EMULATOR) {
     runApp(
-      DevicePreview(
-        enabled: !kReleaseMode,
-        builder: (context) => MyAppLarge(), // Wrap your app
-      ),
+      // DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) => 
+        MyAppLarge(), // Wrap your app
+      // ),
     );
   } else {
     runApp(MyApp());
@@ -73,12 +106,8 @@ class MyAppLarge extends StatelessWidget {
         ),
         fontFamily: 'Poppins',
       ),
-      useInheritedMediaQuery: true, // Set to true
-      locale: DevicePreview.locale(context), //
-
-      builder: DevicePreview.appBuilder,
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
+      useInheritedMediaQuery: true,
+      home: LoadEmulatorDataView(),
     );
   }
 }
